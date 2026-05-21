@@ -217,62 +217,41 @@ img {
 }
 
 .hero-panel > form {
-  border: 1px solid var(--pravac-border-strong);
-  background:
-    radial-gradient(circle at 12% 0%, rgba(169, 21, 36, 0.14), transparent 34%),
-    rgba(14, 15, 18, 0.92);
-  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.28);
 }
 
 .public-shell {
-  color: var(--pravac-text);
-  background:
-    radial-gradient(circle at 72% -4%, rgba(169, 21, 36, 0.12), transparent 34%),
-    linear-gradient(180deg, var(--pravac-black), #090a0c 42%, #060607);
-}
-
-.public-shell .bg-white,
-.public-shell .bg-smoke {
-  background-color: var(--pravac-surface);
-}
-
-.public-shell .text-graphite,
-.public-shell .text-ink {
-  color: var(--pravac-text);
-}
-
-.public-shell .text-zinc-600,
-.public-shell .text-zinc-500,
-.public-shell .text-zinc-400,
-.public-shell .text-zinc-300 {
-  color: var(--pravac-text-muted);
-}
-
-.public-shell .border-zinc-100,
-.public-shell .border-zinc-200,
-.public-shell .border-zinc-300 {
-  border-color: var(--pravac-border);
+  color: var(--pravac-graphite);
+  background: #ffffff;
 }
 
 .field-label {
   @apply text-xs font-semibold uppercase tracking-wide;
-  color: var(--pravac-text-muted);
+  color: #6b7280;
 }
 
 .input-base {
   @apply mt-2 w-full rounded-md border px-4 py-3 text-sm outline-none transition focus:border-pravac focus:ring-4 focus:ring-pravac/10;
   min-height: 48px;
   padding-right: 2.75rem;
-  color: var(--pravac-text);
-  background: rgba(7, 8, 10, 0.78);
-  border-color: var(--pravac-border);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  color-scheme: dark;
+  color: #151515;
+  background: #ffffff;
+  border-color: #d4d4d8;
+  color-scheme: light;
 }
 
 .input-base::placeholder {
-  color: rgba(247, 247, 248, 0.44);
+  color: #8a8f98;
+}
+
+#car-reservation .bg-white\/\[0\.04\],
+#car-reservation .bg-white\/\[0\.05\] {
+  background-color: #ffffff;
+}
+
+#car-reservation .border-white\/10 {
+  border-color: #e4e4e7;
 }
 
 .button-primary {

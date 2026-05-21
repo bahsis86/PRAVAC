@@ -1,0 +1,522 @@
+import {
+  ArrowRight,
+  Briefcase,
+  CalendarDays,
+  Car,
+  CheckCircle2,
+  Luggage,
+  Mail,
+  MapPin,
+  Phone,
+  Send,
+  ShieldCheck,
+  Users,
+} from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { locations } from '../../data/locations.js';
+import { vehicleModels } from '../../data/vehicles.js';
+import { useI18n } from '../../i18n/I18nContext.jsx';
+import { Link } from '../../router/Link.jsx';
+import { appendCollectionItem, createId } from '../../utils/storage.js';
+import CarReservation from '../CarReservation.jsx';
+import SearchFormLongTerm from '../SearchFormLongTerm.jsx';
+import TransferForm from '../TransferForm.jsx';
+
+const contact = {
+  phone: '+421 999 999 999',
+  email: 'info@pravac.sk',
+  address: 'PRAVAC Mobility Point, Bratislava',
+};
+
+const copy = {
+  en: {
+    heroTitle: 'Car rental in Bratislava',
+    heroText: 'Simple rentals, airport pickup and clear booking requests for city trips, business and weekends.',
+    pickup: 'Pickup location',
+    return: 'Return location',
+    pickupDate: 'Pickup date',
+    returnDate: 'Return date',
+    showCars: 'Show cars',
+    services: 'Services',
+    featured: 'Featured cars',
+    why: 'Why PRAVAC',
+    contactTitle: 'Need a car or transfer?',
+    contactText: 'Send a request and a manager will confirm the details.',
+    requestCar: 'Request a car',
+    view: 'View',
+    from: 'from',
+    day: 'day',
+    deposit: 'deposit from',
+    shortIntro: 'Search dates, compare available cars and send a compact booking request.',
+    longIntro: 'Long-term rental is priced individually. Tell us the car class, period and mileage.',
+    transferIntro: 'Request a transfer with route, time, passengers and luggage details.',
+    corporateIntro: 'A simple request for company mobility, fleet needs and rental periods.',
+    tripsIntro: 'Plan a private trip from Bratislava with pickup, date and passenger details.',
+    submit: 'Send request',
+    sent: 'Thank you, your request has been received. A PRAVAC manager will contact you.',
+  },
+};
+
+copy.sk = {
+  ...copy.en,
+  heroTitle: 'Pozicovna aut v Bratislave',
+  heroText: 'Jednoduchy prenajom, vyzdvihnutie na letisku a jasne dopyty pre mesto, biznis aj vikendy.',
+  pickup: 'Miesto prevzatia',
+  return: 'Miesto vratenia',
+  pickupDate: 'Datum prevzatia',
+  returnDate: 'Datum vratenia',
+  showCars: 'Ukazat auta',
+  services: 'Sluzby',
+  featured: 'Vybrane auta',
+  why: 'Preco PRAVAC',
+  contactTitle: 'Potrebujete auto alebo transfer?',
+  contactText: 'Poslite dopyt a manazer potvrdi detaily.',
+  requestCar: 'Poslat dopyt',
+  view: 'Zobrazit',
+  from: 'od',
+  day: 'den',
+  deposit: 'depozit od',
+  shortIntro: 'Vyhladajte termin, porovnajte dostupne auta a poslite kratky dopyt.',
+  longIntro: 'Dlhodoby prenajom sa nacenuje individualne podla triedy auta, obdobia a najazdu.',
+  transferIntro: 'Poslite trasu, cas, pocet pasazierov a batozinu.',
+  corporateIntro: 'Jednoduchy firemny dopyt na vozidla, obdobie a potreby timu.',
+  tripsIntro: 'Naplanujte sukromny vylet z Bratislavy s pohodlnou dopravou.',
+  submit: 'Odoslat dopyt',
+  sent: 'Dakujeme, dopyt bol prijaty. Manazer PRAVAC sa vam ozve.',
+};
+
+copy.ru = {
+  ...copy.en,
+  heroTitle: 'Аренда авто в Братиславе',
+  heroText: 'Простая аренда, подача в аэропорт и понятная заявка для города, бизнеса и поездок.',
+  pickup: 'Место получения',
+  return: 'Место возврата',
+  pickupDate: 'Дата получения',
+  returnDate: 'Дата возврата',
+  showCars: 'Показать авто',
+  services: 'Услуги',
+  featured: 'Популярные авто',
+  why: 'Почему PRAVAC',
+  contactTitle: 'Нужен автомобиль или трансфер?',
+  contactText: 'Отправьте заявку, и менеджер подтвердит детали.',
+  requestCar: 'Оставить заявку',
+  view: 'Смотреть',
+  from: 'от',
+  day: 'день',
+  deposit: 'депозит от',
+  shortIntro: 'Выберите даты, сравните доступные авто и отправьте короткую заявку.',
+  longIntro: 'Долгосрочная аренда рассчитывается индивидуально по классу, сроку и пробегу.',
+  transferIntro: 'Укажите маршрут, время, пассажиров и багаж.',
+  corporateIntro: 'Простая заявка для компании: автомобили, сроки и потребности команды.',
+  tripsIntro: 'Запланируйте частную поездку из Братиславы с комфортным транспортом.',
+  submit: 'Отправить заявку',
+  sent: 'Спасибо, заявка получена. Менеджер PRAVAC свяжется с вами.',
+};
+
+copy.tr = {
+  ...copy.en,
+  heroTitle: 'Bratislava arac kiralama',
+  heroText: 'Sehir, is ve hafta sonu planlari icin kolay kiralama, havalimani teslimi ve net talep formu.',
+  pickup: 'Teslim alma yeri',
+  return: 'Iade yeri',
+  pickupDate: 'Teslim alma tarihi',
+  returnDate: 'Iade tarihi',
+  showCars: 'Araclari goster',
+  services: 'Hizmetler',
+  featured: 'One cikan araclar',
+  why: 'Neden PRAVAC',
+  contactTitle: 'Arac veya transfer mi gerekiyor?',
+  contactText: 'Talep gonderin, yonetici detaylari onaylasin.',
+  requestCar: 'Talep gonder',
+  view: 'Gor',
+  from: 'baslayan',
+  day: 'gun',
+  deposit: 'depozito',
+  shortIntro: 'Tarihleri arayin, uygun araclari karsilastirin ve kisa talep gonderin.',
+  longIntro: 'Uzun sureli kiralama; sinif, sure ve kilometreye gore ozel fiyatlandirilir.',
+  transferIntro: 'Rota, saat, yolcu ve bagaj bilgileriyle transfer talebi gonderin.',
+  corporateIntro: 'Sirket arac ihtiyaci, donem ve ekip planlari icin basit talep.',
+  tripsIntro: 'Bratislava cikisli ozel gezinizi konforlu ulasimla planlayin.',
+  submit: 'Talep gonder',
+  sent: 'Tesekkurler, talebiniz alindi. PRAVAC yoneticisi sizinle iletisime gececek.',
+};
+
+const shortcuts = [
+  { key: 'shortTerm', href: '/sk/short-term-car-rental', icon: Car, text: 'Fast car rental for days and weekends.' },
+  { key: 'longTerm', href: '/sk/long-term-car-rental', icon: CalendarDays, text: 'Individual monthly offers for longer periods.' },
+  { key: 'corporate', href: '/sk/corporate-car-rentals', icon: Briefcase, text: 'Company rentals and practical fleet support.' },
+  { key: 'transfer', href: '/sk/airport-transfers', icon: MapPin, text: 'Airport and city transfers on request.' },
+  { key: 'trips', href: '/sk/trips', icon: Users, text: 'Private trips with comfortable transport.' },
+];
+
+const whyItems = [
+  'Bratislava and airport pickup',
+  'Flexible rental periods',
+  'Transparent estimated pricing',
+  'Manager support',
+];
+
+export function HomePage() {
+  const { t, language } = useI18n();
+  const c = copy[language] || copy.en;
+  const featuredCars = useMemo(() => vehicleModels.filter((model) => model.featured).slice(0, 6), []);
+
+  return (
+    <>
+      <section className="relative overflow-hidden bg-graphite pt-32 text-white md:pt-36">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(5,5,6,0.98),rgba(18,18,20,0.92)_58%,rgba(80,8,18,0.72))]" />
+        <div className="container-shell relative z-10 grid gap-8 pb-10 md:pb-14 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
+          <div className="max-w-2xl">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-red-200">PRAVAC Rent a Car</p>
+            <h1 className="mt-4 text-4xl font-black leading-tight md:text-6xl">{c.heroTitle}</h1>
+            <p className="mt-5 max-w-xl text-base leading-7 text-zinc-200">{c.heroText}</p>
+          </div>
+          <div className="hero-panel">
+            <SimpleHeroSearch copy={c} />
+          </div>
+        </div>
+      </section>
+
+      <PublicSection eyebrow={c.services} title="Choose what you need">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+          {shortcuts.map((item) => (
+            <ServiceShortcut item={item} key={item.key} label={t(`nav.${item.key}`)} />
+          ))}
+        </div>
+      </PublicSection>
+
+      <PublicSection eyebrow={c.featured} id="featured-cars" title="Popular choices">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {featuredCars.map((model) => (
+            <CompactCarCard copy={c} key={model.id} model={model} />
+          ))}
+        </div>
+      </PublicSection>
+
+      <PublicSection eyebrow={c.why} muted title="Simple rental support">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {whyItems.map((item) => (
+            <div className="rounded-lg border border-zinc-200 bg-white p-5" key={item}>
+              <CheckCircle2 className="text-pravac" size={24} />
+              <p className="mt-4 text-lg font-black text-graphite">{item}</p>
+            </div>
+          ))}
+        </div>
+      </PublicSection>
+
+      <ContactCTA copy={c} />
+    </>
+  );
+}
+
+export function ShortTermPage() {
+  const { language } = useI18n();
+  const c = copy[language] || copy.en;
+
+  return (
+    <>
+      <PageIntro eyebrow="Short-term rental" title="Search, choose, request" text={c.shortIntro} />
+      <CarReservation />
+    </>
+  );
+}
+
+export function LongTermPage() {
+  const { language } = useI18n();
+  const c = copy[language] || copy.en;
+
+  return (
+    <>
+      <PageIntro eyebrow="Long-term rental" title="Individual monthly offer" text={c.longIntro} />
+      <PublicSection>
+        <SearchFormLongTerm />
+      </PublicSection>
+      <ContactCTA copy={c} />
+    </>
+  );
+}
+
+export function TransferPage() {
+  const { language } = useI18n();
+  const c = copy[language] || copy.en;
+
+  return (
+    <>
+      <PageIntro eyebrow="Airport transfers" title="Request a transfer" text={c.transferIntro} />
+      <TransferForm />
+      <ContactCTA copy={c} />
+    </>
+  );
+}
+
+export function CorporatePage() {
+  const { language } = useI18n();
+  const c = copy[language] || copy.en;
+
+  return (
+    <>
+      <PageIntro eyebrow="Corporate" title="Company car rental" text={c.corporateIntro} />
+      <PublicSection>
+        <BenefitRow items={['Flexible terms', 'Clear communication', 'Cars for teams']} />
+        <LeadForm
+          button={c.submit}
+          leadType="corporate"
+          sentText={c.sent}
+          fields={[
+            ['companyName', 'Company name'],
+            ['contactPerson', 'Contact person'],
+            ['phone', 'Phone', 'tel'],
+            ['email', 'Email', 'email'],
+            ['fleetNeed', 'Estimated fleet need'],
+            ['rentalPeriod', 'Rental period'],
+          ]}
+        />
+      </PublicSection>
+    </>
+  );
+}
+
+export function TripsPage() {
+  const { language } = useI18n();
+  const c = copy[language] || copy.en;
+
+  return (
+    <>
+      <PageIntro eyebrow="Trips" title="Private trips from Bratislava" text={c.tripsIntro} />
+      <PublicSection>
+        <BenefitRow items={['Pickup by agreement', 'Flexible destinations', 'Support before the trip']} />
+        <LeadForm
+          button={c.submit}
+          leadType="trip"
+          sentText={c.sent}
+          fields={[
+            ['destination', 'Destination'],
+            ['date', 'Date', 'date'],
+            ['passengers', 'Passengers', 'number'],
+            ['name', 'Name'],
+            ['phone', 'Phone', 'tel'],
+            ['email', 'Email', 'email'],
+          ]}
+        />
+      </PublicSection>
+    </>
+  );
+}
+
+export function ContactPage() {
+  const { language } = useI18n();
+  const c = copy[language] || copy.en;
+
+  return (
+    <>
+      <PageIntro eyebrow="Contact" title={c.contactTitle} text={c.contactText} />
+      <ContactCTA copy={c} standalone />
+    </>
+  );
+}
+
+export function SimplePage({ pageKey }) {
+  const { dict, language } = useI18n();
+  const c = copy[language] || copy.en;
+  const [title, text] = dict.pages.simple[pageKey] || dict.pages.simple.notFound;
+
+  return (
+    <>
+      <PageIntro eyebrow="PRAVAC" title={title} text={text} />
+      <ContactCTA copy={c} />
+    </>
+  );
+}
+
+function SimpleHeroSearch({ copy: c }) {
+  const onSubmit = (event) => {
+    event.preventDefault();
+    document.getElementById('featured-cars')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  return (
+    <form className="grid gap-3 rounded-lg bg-white p-4 text-ink shadow-soft sm:grid-cols-2" onSubmit={onSubmit}>
+      <LocationSelect label={c.pickup} name="pickupLocation" />
+      <LocationSelect label={c.return} name="returnLocation" />
+      <Field label={c.pickupDate} name="pickupDate" type="date" defaultValue="2026-05-06" />
+      <Field label={c.returnDate} name="returnDate" type="date" defaultValue="2026-05-09" />
+      <button className="button-primary h-12 w-full gap-2 sm:col-span-2" type="submit">
+        <Car size={18} /> {c.showCars}
+      </button>
+    </form>
+  );
+}
+
+function ServiceShortcut({ item, label }) {
+  const Icon = item.icon;
+
+  return (
+    <Link className="group rounded-lg border border-zinc-200 bg-white p-5 transition hover:-translate-y-1 hover:border-pravac hover:shadow-soft" href={item.href}>
+      <Icon className="text-pravac" size={26} />
+      <h3 className="mt-5 text-lg font-black text-graphite">{label}</h3>
+      <p className="mt-2 text-sm leading-6 text-zinc-600">{item.text}</p>
+      <span className="mt-5 inline-flex items-center gap-2 text-sm font-black text-pravac">
+        Open <ArrowRight size={16} />
+      </span>
+    </Link>
+  );
+}
+
+function CompactCarCard({ copy: c, model }) {
+  return (
+    <Link className="group overflow-hidden rounded-lg border border-zinc-200 bg-white transition hover:-translate-y-1 hover:border-pravac hover:shadow-soft" href="/sk/short-term-car-rental">
+      <VehicleMedia model={model} />
+      <div className="p-5">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h3 className="text-xl font-black text-graphite">{model.title}</h3>
+            <p className="mt-1 text-sm font-bold text-pravac">{model.category}</p>
+          </div>
+          <p className="shrink-0 text-right text-sm font-black text-graphite">{c.from} {model.dailyPriceFrom} EUR/{c.day}</p>
+        </div>
+        <div className="mt-5 grid grid-cols-3 gap-2 text-xs font-bold text-zinc-600">
+          <span className="inline-flex items-center gap-1"><Users size={15} /> {model.seats}</span>
+          <span className="inline-flex items-center gap-1"><Car size={15} /> {model.transmission}</span>
+          <span className="inline-flex items-center gap-1"><Luggage size={15} /> {model.luggage}</span>
+        </div>
+        <div className="mt-5 flex items-center justify-between gap-3">
+          <span className="text-sm text-zinc-600">{c.deposit} {model.depositFrom} EUR</span>
+          <span className="inline-flex items-center gap-2 text-sm font-black text-pravac">{c.view} <ArrowRight size={16} /></span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function ContactCTA({ copy: c, standalone = false }) {
+  return (
+    <section className={`bg-graphite text-white ${standalone ? 'py-14 md:py-20' : 'py-12 md:py-16'}`}>
+      <div className="container-shell grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div>
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-red-200">Contact</p>
+          <h2 className="mt-3 text-3xl font-black md:text-5xl">{c.contactTitle}</h2>
+          <p className="mt-4 max-w-2xl text-zinc-300">{c.contactText}</p>
+          <div className="mt-6 grid gap-3 text-sm font-semibold text-zinc-200 sm:grid-cols-3">
+            <span className="inline-flex items-center gap-2"><Phone size={17} className="text-pravac" /> {contact.phone}</span>
+            <span className="inline-flex items-center gap-2"><Mail size={17} className="text-pravac" /> {contact.email}</span>
+            <span className="inline-flex items-center gap-2"><MapPin size={17} className="text-pravac" /> {contact.address}</span>
+          </div>
+        </div>
+        <Link className="button-primary h-12 gap-2" href="/sk/contact">
+          <Send size={18} /> {c.requestCar}
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function LeadForm({ button, fields, leadType, sentText }) {
+  const [sent, setSent] = useState(false);
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    appendCollectionItem('longTermLeads', {
+      id: createId(`${leadType}-lead`),
+      leadType,
+      createdAt: new Date().toISOString(),
+      status: 'new',
+      fields: Object.fromEntries(form.entries()),
+    });
+    setSent(true);
+    event.currentTarget.reset();
+  };
+
+  return (
+    <form className="mt-8 grid gap-4 rounded-lg border border-zinc-200 bg-white p-5 md:grid-cols-2 lg:grid-cols-3" onSubmit={onSubmit}>
+      {fields.map(([name, label, type = 'text']) => (
+        <Field key={name} label={label} name={name} type={type} required />
+      ))}
+      <label className="md:col-span-2 lg:col-span-3">
+        <span className="field-label">Comment</span>
+        <textarea className="input-base min-h-28" name="comment" placeholder="Tell us what you need." />
+      </label>
+      <div className="md:col-span-2 lg:col-span-3">
+        <button className="button-primary h-12 w-full gap-2 sm:w-auto" type="submit">
+          <Send size={18} /> {button}
+        </button>
+      </div>
+      {sent && <p className="rounded-md bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700 md:col-span-2 lg:col-span-3">{sentText}</p>}
+    </form>
+  );
+}
+
+function PublicSection({ children, eyebrow, id, muted = false, title }) {
+  return (
+    <section className={`${muted ? 'bg-smoke' : 'bg-white'} py-12 md:py-16`} id={id}>
+      <div className="container-shell">
+        {(eyebrow || title) && (
+          <div className="mb-7 max-w-3xl">
+            {eyebrow && <p className="text-sm font-bold uppercase tracking-[0.18em] text-pravac">{eyebrow}</p>}
+            {title && <h2 className="mt-3 text-3xl font-black text-graphite md:text-5xl">{title}</h2>}
+          </div>
+        )}
+        {children}
+      </div>
+    </section>
+  );
+}
+
+function PageIntro({ eyebrow, text, title }) {
+  return (
+    <section className="bg-graphite pt-32 text-white md:pt-36">
+      <div className="container-shell pb-10 md:pb-14">
+        <p className="text-sm font-bold uppercase tracking-[0.2em] text-red-200">{eyebrow}</p>
+        <h1 className="mt-4 max-w-4xl text-4xl font-black leading-tight md:text-6xl">{title}</h1>
+        <p className="mt-5 max-w-2xl text-base leading-7 text-zinc-300">{text}</p>
+      </div>
+    </section>
+  );
+}
+
+function BenefitRow({ items }) {
+  return (
+    <div className="grid gap-4 md:grid-cols-3">
+      {items.map((item) => (
+        <div className="rounded-lg border border-zinc-200 bg-white p-5" key={item}>
+          <ShieldCheck className="text-pravac" size={24} />
+          <p className="mt-3 font-black text-graphite">{item}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function LocationSelect({ label, name }) {
+  return (
+    <label>
+      <span className="field-label">{label}</span>
+      <select className="input-base" name={name} defaultValue="bratislava-center" required>
+        {locations.filter((location) => location.pickupAvailable).map((location) => (
+          <option key={location.id} value={location.id}>{location.name}</option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function Field({ label, ...props }) {
+  return (
+    <label>
+      <span className="field-label">{label}</span>
+      <input className="input-base" {...props} />
+    </label>
+  );
+}
+
+function VehicleMedia({ model }) {
+  if (model.image?.type === 'remote') {
+    return (
+      <div className="flex aspect-[16/10] items-center justify-center bg-[radial-gradient(circle_at_50%_18%,#ffffff,#f4f5f7)] p-5">
+        <img className="max-h-full w-full object-contain" src={model.image.url} alt={model.title} />
+      </div>
+    );
+  }
+
+  return <div className="aspect-[16/10] bg-smoke" />;
+}

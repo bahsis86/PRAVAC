@@ -206,7 +206,7 @@ export default function CarReservation() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-[var(--pravac-black)] py-14 md:py-20">
+    <section className="relative overflow-hidden bg-smoke py-14 md:py-20">
       <AmbientBackground variant="section" />
       <div className="container-shell relative z-10" id="car-reservation">
         <StepProgress activeStep={activeStep} copy={copy} />

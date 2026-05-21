@@ -14,9 +14,9 @@ export default function TransferForm() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-[var(--pravac-black)] py-12 md:py-16">
+    <section className="relative overflow-hidden bg-white py-12 md:py-16">
       <AmbientBackground variant="section" />
-      <form className="container-shell relative z-10 grid gap-4 rounded-lg border border-white/10 bg-white/[0.05] p-5 shadow-soft backdrop-blur md:grid-cols-2 lg:grid-cols-3" onSubmit={onSubmit}>
+      <form className="container-shell relative z-10 grid gap-4 rounded-lg border border-zinc-200 bg-white p-5 shadow-soft md:grid-cols-2 lg:grid-cols-3" onSubmit={onSubmit}>
         <Input label={t('forms.from')} name="from" required />
         <Input label={t('forms.to')} name="to" required />
         <Input label={t('forms.time')} name="time" type="datetime-local" required />
