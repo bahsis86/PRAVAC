@@ -7,6 +7,15 @@ const client = await connect(target.webSocketDebuggerUrl);
 try {
   await send('Page.enable');
   await send('Runtime.enable');
+  await send('Log.enable');
+  const browserErrors = [];
+  client.eventTarget.addEventListener('Runtime.exceptionThrown', (event) => {
+    browserErrors.push(event.detail?.exceptionDetails?.text || 'runtime exception');
+  });
+  client.eventTarget.addEventListener('Log.entryAdded', (event) => {
+    const entry = event.detail?.entry;
+    if (entry?.level === 'error') browserErrors.push(entry.text || 'browser log error');
+  });
   await send('Emulation.setDeviceMetricsOverride', {
     width: 390,
     height: 844,
@@ -26,12 +35,12 @@ try {
     const rect = select.getBoundingClientRect();
     return rect.width >= 60 && rect.height >= 40;
   });
-  await expectEval('mobile quick navigation is visible', () => {
+  await expectEval('mobile quick navigation is compact and visible', () => {
     const nav = [...document.querySelectorAll('header nav')].find((item) => {
       const rect = item.getBoundingClientRect();
       return rect.width > 0 && rect.height > 0;
     });
-    return Boolean(nav && nav.querySelectorAll('a').length >= 5);
+    return Boolean(nav && nav.querySelectorAll('a').length === 3);
   });
 
   await evaluate(() => {
@@ -60,6 +69,49 @@ try {
   await evaluate(() => document.querySelector('.hero-panel form button[type="submit"]')?.click());
   await waitFor(() => location.hash === '' && window.scrollY > 300);
   await expectEval('hero search scrolls to reservation', () => window.scrollY > 300);
+
+  const routes = [
+    '',
+    'sk',
+    'sk/short-term-car-rental',
+    'sk/long-term-car-rental',
+    'sk/corporate-car-rentals',
+    'sk/airport-transfers',
+    'sk/trips',
+    'sk/admin-pravac',
+  ];
+
+  for (const width of [360, 390, 430]) {
+    await send('Emulation.setDeviceMetricsOverride', {
+      width,
+      height: 844,
+      deviceScaleFactor: 3,
+      mobile: true,
+    });
+
+    for (const route of routes) {
+      await navigate(new URL(route, baseUrl).toString());
+      await expectEval(`${width}px ${route || 'home'} has no horizontal scroll`, () => document.documentElement.scrollWidth <= window.innerWidth + 1);
+      await expectEval(`${width}px ${route || 'home'} logo renders or falls back`, () => {
+        const brandNodes = [...document.querySelectorAll('header img[alt*="PRAVAC"], footer img[alt*="PRAVAC"]')];
+        const brokenLogo = brandNodes.some((img) => img.complete && img.naturalWidth === 0);
+        const fallback = document.body.innerText.includes('PRAVAC');
+        return !brokenLogo && (brandNodes.length > 0 || fallback);
+      });
+      await expectEval(`${width}px ${route || 'home'} form controls fit viewport`, () => {
+        const controls = [...document.querySelectorAll('input, select, textarea, button')];
+        return controls.every((control) => {
+          const rect = control.getBoundingClientRect();
+          if (rect.width === 0 || rect.height === 0) return true;
+          return rect.left >= -1 && rect.right <= window.innerWidth + 1;
+        });
+      });
+    }
+  }
+
+  if (browserErrors.length) {
+    throw new Error(`Browser console errors: ${browserErrors.join(' | ')}`);
+  }
 
   console.log('Mobile smoke test passed.');
 } finally {

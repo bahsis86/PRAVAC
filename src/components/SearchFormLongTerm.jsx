@@ -38,7 +38,7 @@ export default function SearchFormLongTerm() {
   };
 
   return (
-    <form className="grid gap-4 rounded-lg bg-white p-4 text-ink shadow-soft md:grid-cols-2 lg:grid-cols-4 lg:items-end lg:p-5" onSubmit={onSubmit}>
+    <form className="grid gap-4 rounded-lg border border-zinc-200 bg-white p-4 text-ink shadow-sm md:grid-cols-2 lg:grid-cols-4 lg:items-end lg:p-5" onSubmit={onSubmit}>
       <div className="md:col-span-2 lg:col-span-4">
         <p className="text-sm font-bold uppercase tracking-[0.18em] text-pravac">{copy.eyebrow}</p>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600">{copy.intro}</p>
@@ -81,7 +81,7 @@ export default function SearchFormLongTerm() {
       <Input icon={<User size={18} />} label={t('forms.firstName')} name="customerName" required />
       <Input icon={<Phone size={18} />} label={t('forms.phone')} name="customerPhone" type="tel" placeholder="+421 999 999 999" required />
       <Input icon={<Mail size={18} />} label={t('forms.email')} name="customerEmail" type="email" placeholder="info@example.com" required />
-      <div className="grid gap-3 rounded-md bg-smoke p-4 md:col-span-2 lg:col-span-4">
+      <div className="grid gap-3 rounded-md bg-pravac-blue/[0.04] p-4 md:col-span-2 lg:col-span-4">
         <p className="text-sm font-black text-graphite">{copy.conditions}</p>
         <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-4">
           {copy.options.map((option) => (

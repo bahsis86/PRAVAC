@@ -13,12 +13,12 @@ export default function Footer() {
   const { t } = useI18n();
 
   return (
-    <footer className="border-t border-white/10 bg-black text-white">
-      <div className="container-shell grid gap-9 py-12 md:grid-cols-[1.2fr_0.8fr_1fr]">
+    <footer className="border-t border-white/10 bg-pravac-blue text-white">
+      <div className="container-shell grid gap-7 py-9 md:grid-cols-[1.2fr_0.8fr_1fr] md:py-12">
         <div>
-          <BrandLogo imageClassName="h-12" />
-          <p className="mt-5 max-w-sm text-sm leading-6 text-zinc-300">{t('common.slogan')}</p>
-          <ul className="mt-5 grid gap-2 text-sm text-zinc-300">
+          <BrandLogo imageClassName="h-10" />
+          <p className="mt-4 max-w-sm text-sm leading-6 text-zinc-300">{t('common.slogan')}</p>
+          <ul className="mt-4 grid gap-2 text-sm text-zinc-300">
             <li className="flex gap-3"><Phone size={17} className="text-pravac" /> {t('common.phone')}</li>
             <li className="flex gap-3"><Mail size={17} className="text-pravac" /> {t('common.email')}</li>
             <li className="flex gap-3"><MapPin size={17} className="text-pravac" /> {t('common.address')}</li>
@@ -32,7 +32,7 @@ export default function Footer() {
           <FooterColumn title={t('common.more')} items={secondaryLinks} />
         </div>
       </div>
-      <div className="border-t border-white/10 py-5 text-center text-xs text-zinc-400">
+      <div className="border-t border-white/10 py-4 text-center text-xs text-zinc-400">
         {t('common.copyright')}
       </div>
     </footer>

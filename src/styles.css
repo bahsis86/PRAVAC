@@ -8,23 +8,26 @@
   --pravac-black: #062E45;
   --pravac-bg: #062E45;
   --pravac-bg-soft: #0b3a54;
-  --pravac-graphite: #062E45;
+  --pravac-teal: #0b5a6f;
+  --pravac-dark: #062E45;
+  --pravac-graphite: #123242;
   --pravac-charcoal: #0b3a54;
-  --pravac-surface: rgba(18, 20, 24, 0.88);
-  --pravac-surface-soft: rgba(28, 30, 35, 0.76);
+  --pravac-surface: #ffffff;
+  --pravac-surface-soft: #F6F8F9;
   --pravac-burgundy: #F59B12;
   --pravac-orange: #F59B12;
+  --pravac-orange-soft: #FFF1D5;
   --pravac-blue: #062E45;
   --pravac-paper: #F6F8F9;
   --pravac-warm: #FFF1D5;
   --pravac-burgundy-bright: #ffae33;
   --pravac-burgundy-soft: rgba(245, 155, 18, 0.16);
-  --pravac-border: rgba(255, 255, 255, 0.12);
+  --pravac-border: rgba(6, 46, 69, 0.14);
   --pravac-border-strong: rgba(255, 255, 255, 0.2);
   --pravac-glow: rgba(245, 155, 18, 0.28);
-  --pravac-text: #f7f7f8;
-  --pravac-text-muted: #a7a9ad;
-  --pravac-muted: #a7a9ad;
+  --pravac-text: #17252f;
+  --pravac-text-muted: #64727d;
+  --pravac-muted: #64727d;
   --pravac-danger: #ff6575;
   --pravac-success: #47d18c;
   color: #222222;
@@ -185,7 +188,7 @@ img {
 .premium-section--muted {
   background:
     radial-gradient(circle at 80% 0%, rgba(245, 155, 18, 0.08), transparent 34%),
-    var(--pravac-bg-soft);
+    var(--pravac-surface-soft);
 }
 
 .premium-panel {
@@ -195,7 +198,7 @@ img {
   border: 1px solid rgba(255, 255, 255, 0.12);
   background:
     radial-gradient(circle at 16% 0%, rgba(245, 155, 18, 0.2), transparent 35%),
-    linear-gradient(135deg, rgba(21, 21, 21, 0.96), rgba(8, 8, 10, 0.98));
+    linear-gradient(135deg, rgba(6, 46, 69, 0.98), rgba(7, 59, 82, 0.96));
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
@@ -203,7 +206,7 @@ img {
   position: relative;
   border-radius: 0.5rem;
   border: 1px solid var(--pravac-border);
-  background: linear-gradient(145deg, rgba(22, 24, 29, 0.92), rgba(12, 13, 16, 0.94));
+  background: #ffffff;
   transition: transform 240ms ease, border-color 240ms ease, box-shadow 240ms ease, background 240ms ease;
   isolation: isolate;
 }
@@ -247,13 +250,40 @@ img {
 }
 
 .input-base {
-  @apply mt-2 w-full rounded-md border px-4 py-3 text-sm outline-none transition focus:border-pravac focus:ring-4 focus:ring-pravac/10;
-  min-height: 48px;
-  padding-right: 2.75rem;
+  @apply mt-2 w-full rounded-md border text-sm outline-none transition focus:border-pravac focus:ring-4 focus:ring-pravac/10;
+  box-sizing: border-box;
+  min-height: 54px;
+  padding: 0.875rem 3rem 0.875rem 1rem;
+  line-height: 1.35;
   color: #151515;
   background: #ffffff;
   border-color: #d4d4d8;
   color-scheme: light;
+}
+
+.input-base.pl-10 {
+  padding-left: 2.85rem;
+  padding-right: 3.15rem;
+}
+
+select.input-base {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2364727d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position: right 1rem center;
+  background-repeat: no-repeat;
+  background-size: 18px 18px;
+}
+
+textarea.input-base {
+  min-height: 112px;
+  resize: vertical;
+}
+
+input[type='date'].input-base,
+input[type='time'].input-base,
+input[type='datetime-local'].input-base {
+  min-width: 0;
+  padding-right: 0.85rem;
 }
 
 .input-base::placeholder {
@@ -315,6 +345,14 @@ img {
   select,
   textarea {
     font-size: 16px;
+  }
+
+  .container-shell {
+    width: min(1180px, calc(100% - 24px));
+  }
+
+  .input-base {
+    min-height: 56px;
   }
 
   .ambient-background__grid {

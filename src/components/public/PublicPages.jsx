@@ -17,6 +17,7 @@ import { locations } from '../../data/locations.js';
 import { vehicleModels } from '../../data/vehicles.js';
 import { useI18n } from '../../i18n/I18nContext.jsx';
 import { Link } from '../../router/Link.jsx';
+import { assetPath } from '../../utils/assetPath.js';
 import { appendCollectionItem, createId } from '../../utils/storage.js';
 import BrandLogo from '../BrandLogo.jsx';
 import CarReservation from '../CarReservation.jsx';
@@ -181,25 +182,25 @@ export function HomePage() {
 
   return (
     <>
-      <section className="relative overflow-hidden bg-graphite pt-28 text-white md:pt-32">
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(5,5,6,0.98),rgba(8,47,73,0.9)_58%,rgba(245,154,11,0.28))]" />
+      <section className="relative overflow-hidden bg-pravac-blue pt-24 text-white md:pt-32">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(6,46,69,0.98),rgba(8,65,88,0.92)_58%,rgba(245,155,18,0.24))]" />
         <img
           className="pointer-events-none absolute right-[-10%] top-20 w-[34rem] max-w-none opacity-[0.06] md:w-[48rem]"
-          src="/assets/pravac/logo/pravac-mark.svg"
+          src={assetPath('assets/pravac/logo/pravac-mark.svg')}
           alt=""
           aria-hidden="true"
         />
         <div className="pointer-events-none absolute left-[8%] top-24 h-48 w-[78%] rounded-[100%] border-t-4 border-pravac-orange/40" />
         <div className="pointer-events-none absolute bottom-0 right-[-12%] h-64 w-64 rounded-full bg-pravac-orange/15 blur-3xl" />
-        <div className="container-shell relative z-10 grid gap-7 pb-8 md:pb-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
+        <div className="container-shell relative z-10 grid gap-5 pb-7 md:gap-7 md:pb-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
           <div className="max-w-2xl">
             <p className="text-sm font-bold uppercase tracking-[0.2em] text-pravac-orange">PRAVAC Rent a Car</p>
-            <h1 className="mt-3 text-4xl font-bold leading-tight md:text-6xl">{c.heroTitle}</h1>
-            <p className="mt-4 max-w-xl text-base leading-7 text-zinc-200">{c.heroText}</p>
-            <TrustStrip className="mt-6" />
+            <h1 className="mt-3 text-3xl font-bold leading-tight md:text-6xl">{c.heroTitle}</h1>
+            <p className="mt-3 max-w-xl text-sm leading-6 text-zinc-200 md:mt-4 md:text-base md:leading-7">{c.heroText}</p>
+            <TrustStrip className="mt-6 hidden md:grid" />
           </div>
           <div className="grid gap-4">
-            <VehicleImagePlaceholder className="h-44 rounded-lg md:h-64 lg:h-72" hero model={heroModel} />
+            <VehicleImagePlaceholder className="hidden h-40 rounded-lg sm:block md:h-64 lg:h-72" hero model={heroModel} />
           <div className="hero-panel">
             <SimpleHeroSearch copy={c} />
           </div>
@@ -207,7 +208,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="border-b border-zinc-200 bg-white py-4">
+      <section className="border-b border-zinc-200 bg-white py-3 md:py-4">
         <div className="container-shell grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
           {shortcuts.map((item) => (
             <ServiceShortcut copy={c} item={item} key={item.key} label={t(`nav.${item.key}`)} />
@@ -427,10 +428,10 @@ function CompactCarCard({ copy: c, model }) {
 
 function ContactCTA({ copy: c, standalone = false }) {
   return (
-    <section className={`bg-graphite text-white ${standalone ? 'py-14 md:py-20' : 'py-12 md:py-16'}`}>
+    <section className={`bg-pravac-blue text-white ${standalone ? 'py-12 md:py-20' : 'py-10 md:py-16'}`}>
       <div className="container-shell grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-red-200">Contact</p>
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-pravac-orange">Contact</p>
           <h2 className="mt-3 text-3xl font-black md:text-5xl">{c.contactTitle}</h2>
           <p className="mt-4 max-w-2xl text-zinc-300">{c.contactText}</p>
           <div className="mt-6 grid gap-3 text-sm font-semibold text-zinc-200 sm:grid-cols-3">
@@ -465,7 +466,7 @@ function LeadForm({ button, fields, leadType, sentText }) {
   };
 
   return (
-    <form className="mt-8 grid gap-4 rounded-lg border border-zinc-200 bg-white p-5 md:grid-cols-2 lg:grid-cols-3" onSubmit={onSubmit}>
+    <form className="mt-6 grid gap-4 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm md:grid-cols-2 md:p-5 lg:grid-cols-3" onSubmit={onSubmit}>
       {fields.map(([name, label, type = 'text']) => (
         <Field key={name} label={label} name={name} type={type} required />
       ))}
@@ -485,7 +486,7 @@ function LeadForm({ button, fields, leadType, sentText }) {
 
 function PublicSection({ children, eyebrow, id, muted = false, title }) {
   return (
-    <section className={`${muted ? 'bg-smoke' : 'bg-white'} py-12 md:py-16`} id={id}>
+    <section className={`${muted ? 'bg-smoke' : 'bg-white'} py-9 md:py-16`} id={id}>
       <div className="container-shell">
         {(eyebrow || title) && (
           <div className="mb-7 max-w-3xl">
@@ -501,11 +502,11 @@ function PublicSection({ children, eyebrow, id, muted = false, title }) {
 
 function PageIntro({ eyebrow, text, title }) {
   return (
-    <section className="bg-graphite pt-32 text-white md:pt-36">
-      <div className="container-shell pb-10 md:pb-14">
-        <p className="text-sm font-bold uppercase tracking-[0.2em] text-red-200">{eyebrow}</p>
-        <h1 className="mt-4 max-w-4xl text-4xl font-black leading-tight md:text-6xl">{title}</h1>
-        <p className="mt-5 max-w-2xl text-base leading-7 text-zinc-300">{text}</p>
+    <section className="bg-pravac-blue pt-28 text-white md:pt-36">
+      <div className="container-shell pb-8 md:pb-14">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-pravac-orange md:text-sm">{eyebrow}</p>
+        <h1 className="mt-3 max-w-4xl text-3xl font-black leading-tight md:mt-4 md:text-6xl">{title}</h1>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-300 md:mt-5 md:text-base md:leading-7">{text}</p>
       </div>
     </section>
   );
@@ -513,11 +514,11 @@ function PageIntro({ eyebrow, text, title }) {
 
 function BenefitRow({ items }) {
   return (
-    <div className="grid gap-4 md:grid-cols-3">
+    <div className="grid gap-3 md:grid-cols-3">
       {items.map((item) => (
-        <div className="rounded-lg border border-zinc-200 bg-white p-5" key={item}>
-          <ShieldCheck className="text-pravac" size={24} />
-          <p className="mt-3 font-black text-graphite">{item}</p>
+        <div className="flex items-center gap-3 rounded-md bg-pravac-blue/[0.04] px-1 py-2" key={item}>
+          <ShieldCheck className="shrink-0 text-pravac-orange" size={21} />
+          <p className="font-black text-graphite">{item}</p>
         </div>
       ))}
     </div>

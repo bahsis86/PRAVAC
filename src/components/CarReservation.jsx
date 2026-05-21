@@ -22,6 +22,7 @@ import { findAvailableVehicleModels } from '../utils/availability.js';
 import { getLocationName } from '../utils/displayText.js';
 import { calculatePriceBreakdown } from '../utils/pricing.js';
 import { appendCollectionItem, createId, getMockStore, loadCollection, saveCollection } from '../utils/storage.js';
+import { assetPath } from '../utils/assetPath.js';
 import VehicleImagePlaceholder from './VehicleImagePlaceholder.jsx';
 import AmbientBackground from './visual/AmbientBackground.jsx';
 import GlowCard from './visual/GlowCard.jsx';
@@ -50,14 +51,14 @@ const defaultFilters = {
 };
 
 const bodyTypes = [
-  { id: 'sedan', label: 'Sedan', icon: '/assets/pravac/body-cards/body-sedan-card.svg' },
-  { id: 'hatchback', label: 'Hatchback', icon: '/assets/pravac/body-cards/body-hatchback-card.svg' },
-  { id: 'suv', label: 'SUV', icon: '/assets/pravac/body-cards/body-suv-card.svg' },
-  { id: 'wagon', label: 'Wagon', icon: '/assets/pravac/body-cards/body-wagon-card.svg' },
-  { id: 'coupe', label: 'Coupé', icon: '/assets/pravac/body-cards/body-coupe-card.svg' },
-  { id: 'convertible', label: 'Cabrio', icon: '/assets/pravac/body-cards/body-convertible-card.svg' },
-  { id: 'minivan', label: 'Minivan', icon: '/assets/pravac/body-cards/body-minivan-card.svg' },
-  { id: 'pickup', label: 'Pickup', icon: '/assets/pravac/body-cards/body-pickup-card.svg' },
+  { id: 'sedan', label: 'Sedan', icon: assetPath('assets/pravac/body-cards/body-sedan-card.svg') },
+  { id: 'hatchback', label: 'Hatchback', icon: assetPath('assets/pravac/body-cards/body-hatchback-card.svg') },
+  { id: 'suv', label: 'SUV', icon: assetPath('assets/pravac/body-cards/body-suv-card.svg') },
+  { id: 'wagon', label: 'Wagon', icon: assetPath('assets/pravac/body-cards/body-wagon-card.svg') },
+  { id: 'coupe', label: 'Coupe', icon: assetPath('assets/pravac/body-cards/body-coupe-card.svg') },
+  { id: 'convertible', label: 'Cabrio', icon: assetPath('assets/pravac/body-cards/body-convertible-card.svg') },
+  { id: 'minivan', label: 'Minivan', icon: assetPath('assets/pravac/body-cards/body-minivan-card.svg') },
+  { id: 'pickup', label: 'Pickup', icon: assetPath('assets/pravac/body-cards/body-pickup-card.svg') },
 ];
 
 export default function CarReservation() {
@@ -223,7 +224,7 @@ export default function CarReservation() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-smoke py-14 md:py-20">
+    <section className="relative overflow-hidden bg-smoke py-10 md:py-20">
       <AmbientBackground variant="section" />
       <div className="container-shell relative z-10" id="car-reservation">
         <StepProgress activeStep={activeStep} copy={copy} />
@@ -340,7 +341,7 @@ export default function CarReservation() {
 
 function RentalSearchPanel({ copy, error, language, loading, locations, onChange, onSubmit, search }) {
   return (
-    <section id="rental-search-panel" className="premium-panel overflow-hidden bg-graphite text-white shadow-soft">
+    <section id="rental-search-panel" className="premium-panel overflow-hidden bg-pravac-blue text-white shadow-soft">
       <div className="grid gap-0 lg:grid-cols-[1fr_0.42fr]">
         <form className="grid gap-4 p-5 md:grid-cols-2 lg:grid-cols-3 lg:p-7" onSubmit={onSubmit}>
           <div className="md:col-span-2 lg:col-span-3">
@@ -360,10 +361,10 @@ function RentalSearchPanel({ copy, error, language, loading, locations, onChange
           </button>
           {error && <p className="rounded-md bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 md:col-span-2 lg:col-span-3">{error}</p>}
         </form>
-        <div className="grid content-center gap-3 border-t border-white/10 bg-black/25 p-5 lg:border-l lg:border-t-0 lg:p-7">
+        <div className="grid content-center gap-3 border-t border-white/10 bg-white/[0.04] p-5 lg:border-l lg:border-t-0 lg:p-7">
           {copy.trustItems.map((item) => (
-            <div key={item} className="flex items-center gap-3 rounded-md border border-white/10 bg-white/10 px-4 py-3 text-sm font-bold shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-              <Check size={18} className="text-red-200" /> {item}
+            <div key={item} className="flex items-center gap-3 text-sm font-bold text-zinc-200">
+              <Check size={18} className="shrink-0 text-pravac-orange" /> {item}
             </div>
           ))}
         </div>

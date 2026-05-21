@@ -21,7 +21,7 @@ export default function SearchFormShortTerm() {
   };
 
   return (
-    <form className="grid gap-4 rounded-lg bg-white p-4 text-ink shadow-soft md:grid-cols-2 md:p-5 lg:grid-cols-[1fr_1fr_1fr_1fr_auto] lg:items-end" onSubmit={onSubmit}>
+    <form className="grid gap-4 rounded-lg border border-zinc-200 bg-white p-4 text-ink shadow-sm md:grid-cols-2 md:p-5 lg:grid-cols-[1fr_1fr_1fr_1fr_auto] lg:items-end" onSubmit={onSubmit}>
       <LocationSelect label={t('reservation.pickupLocation')} name="pickupLocation" defaultValue="bratislava-center" />
       <LocationSelect label={t('reservation.dropoffLocation')} name="dropoffLocation" defaultValue="bratislava-airport" />
       <label>

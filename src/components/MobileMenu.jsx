@@ -29,9 +29,9 @@ export default function MobileMenu({ open, onClose }) {
   if (!open) return null;
 
   return (
-    <div id="mobile-menu" className="fixed inset-0 z-[999] overflow-y-auto bg-black text-white lg:hidden" role="dialog" aria-modal="true">
-      <div className="container-shell sticky top-0 z-10 flex h-20 items-center justify-between border-b border-white/10 bg-black/95 backdrop-blur">
-        <BrandLogo imageClassName="h-10" onClick={onClose} />
+    <div id="mobile-menu" className="fixed inset-0 z-[999] overflow-y-auto bg-pravac-blue text-white lg:hidden" role="dialog" aria-modal="true">
+      <div className="container-shell sticky top-0 z-10 flex h-16 items-center justify-between border-b border-white/10 bg-pravac-blue/95 backdrop-blur">
+        <BrandLogo imageClassName="h-9" onClick={onClose} />
         <button className="flex h-11 w-11 items-center justify-center rounded-md border border-white/10 bg-white/10 transition active:scale-95 active:bg-white/20" type="button" onClick={onClose} aria-label={t('common.closeMenu')}>
           <X size={28} />
         </button>
@@ -40,9 +40,9 @@ export default function MobileMenu({ open, onClose }) {
         <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-zinc-400">{t('common.language')}</p>
         <LanguageButtons />
       </div>
-      <nav className="container-shell grid gap-3 pt-7 text-xl font-semibold">
+      <nav className="container-shell grid gap-2 pt-6 text-lg font-semibold">
         {navItems.map((item) => (
-          <Link key={item.href} className="flex min-h-14 items-center rounded-md border border-white/10 bg-white/5 px-4 py-3 active:bg-white/15" href={item.href} onClick={onClose}>
+          <Link key={item.href} className="flex min-h-12 items-center rounded-md bg-white/[0.08] px-4 py-3 active:bg-white/15" href={item.href} onClick={onClose}>
             {t(`nav.${item.key}`)}
           </Link>
         ))}

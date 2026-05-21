@@ -13,7 +13,7 @@ export function LanguageSelect({ compact = false, className = '' }) {
   return (
     <select
       aria-label={t('common.language')}
-      className={`min-h-11 min-w-20 rounded-md border border-white/25 bg-zinc-950/80 text-sm font-semibold text-white outline-none transition active:bg-white/15 hover:bg-white/15 focus:border-pravac focus:ring-4 focus:ring-pravac/20 ${
+      className={`min-h-11 min-w-20 rounded-md border border-white/25 bg-pravac-blue/90 text-sm font-semibold text-white outline-none transition active:bg-white/15 hover:bg-white/15 focus:border-pravac focus:ring-4 focus:ring-pravac/20 ${
         compact ? 'px-2 py-2 pr-8' : 'px-3 py-2 pr-9'
       } ${className}`}
       value={language}
