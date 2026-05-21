@@ -11,15 +11,6 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { t } = useI18n();
   const openMenu = () => setMenuOpen(true);
-  const openMenuFromMouse = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setMenuOpen(true);
-  };
-  const openMenuFromTouch = (event) => {
-    event.stopPropagation();
-    setMenuOpen(true);
-  };
   const mobileQuickNav = navItems.filter((item) => ['shortTerm', 'longTerm', 'transfer'].includes(item.key));
 
   return (
@@ -42,8 +33,6 @@ export default function Header() {
             className="flex h-11 min-w-[84px] touch-manipulation items-center justify-center gap-2 rounded-md border border-white/15 bg-white/10 px-3 text-sm font-black text-white transition active:scale-95 active:bg-white/20"
             type="button"
             onClick={openMenu}
-            onMouseDown={openMenuFromMouse}
-            onTouchStart={openMenuFromTouch}
             aria-label={t('common.openMenu')}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"

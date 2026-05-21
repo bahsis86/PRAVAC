@@ -181,7 +181,7 @@ export function HomePage() {
 
   return (
     <>
-      <section className="relative overflow-hidden bg-pravac-blue pt-24 text-white md:pt-32">
+      <section className="relative overflow-hidden bg-pravac-blue pt-32 text-white md:pt-32">
         <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(6,46,69,0.98),rgba(8,65,88,0.92)_58%,rgba(245,155,18,0.24))]" />
         <img
           className="pointer-events-none absolute right-[-10%] top-20 w-[34rem] max-w-none opacity-[0.06] md:w-[48rem]"
@@ -193,7 +193,7 @@ export function HomePage() {
         <div className="pointer-events-none absolute bottom-0 right-[-12%] h-64 w-64 rounded-full bg-pravac-orange/15 blur-3xl" />
         <div className="container-shell relative z-10 grid gap-5 pb-7 md:gap-7 md:pb-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
           <div className="max-w-2xl">
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-pravac-orange">PRAVAC Rent a Car</p>
+            <p className="inline-flex max-w-full items-center text-xs font-bold uppercase tracking-[0.12em] text-pravac-orange md:text-sm md:tracking-[0.2em]">PRAVAC Rent a Car</p>
             <h1 className="mt-3 text-3xl font-bold leading-tight md:text-6xl">{c.heroTitle}</h1>
             <p className="mt-3 max-w-xl text-sm leading-6 text-zinc-200 md:mt-4 md:text-base md:leading-7">{c.heroText}</p>
             <TrustStrip className="mt-6 hidden md:grid" />

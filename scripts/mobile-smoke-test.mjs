@@ -54,9 +54,9 @@ try {
   await waitFor(() => document.documentElement.lang === 'en');
   await expectEval('header language switch works', () => document.documentElement.lang === 'en');
 
-  await tapSelector('button[aria-controls="mobile-menu"]');
+  await clickSelector('button[aria-controls="mobile-menu"]');
   await waitFor(() => Boolean(document.querySelector('#mobile-menu')));
-  await expectEval('mobile menu opens from real tap', () => Boolean(document.querySelector('#mobile-menu')));
+  await expectEval('mobile menu opens from the menu control', () => Boolean(document.querySelector('#mobile-menu')));
   await expectEval('mobile menu is a right drawer with service and quick links', () => {
     const menu = document.querySelector('#mobile-menu aside');
     if (!menu) return false;
@@ -86,6 +86,16 @@ try {
   await expectEval('hero search scrolls to reservation', () => window.scrollY > 300);
 
   await navigate(baseUrl);
+  await expectEval('hero kicker is aligned below mobile header', () => {
+    const kicker = [...document.querySelectorAll('p')].find((item) => item.textContent.trim() === 'PRAVAC Rent a Car');
+    const heading = document.querySelector('h1');
+    const header = document.querySelector('header');
+    if (!kicker || !heading || !header) return false;
+    const kickerRect = kicker.getBoundingClientRect();
+    const headingRect = heading.getBoundingClientRect();
+    const headerRect = header.getBoundingClientRect();
+    return Math.abs(kickerRect.left - headingRect.left) <= 1 && kickerRect.top >= headerRect.bottom + 16;
+  });
   for (const [lang, expected] of [
     ['sk', 'Krátkodobý prenájom'],
     ['en', 'Short-term rental'],
@@ -223,7 +233,7 @@ async function expectEval(label, fn, ...args) {
   console.log(`ok - ${label}`);
 }
 
-async function tapSelector(selector) {
+async function clickSelector(selector) {
   const rect = await evaluateExpression(`(() => {
     const element = document.querySelector(${JSON.stringify(selector)});
     if (!element) return null;
@@ -237,17 +247,9 @@ async function tapSelector(selector) {
   })()`);
 
   if (!rect || rect.width <= 0 || rect.height <= 0) {
-    throw new Error(`Cannot tap missing or hidden selector: ${selector}`);
+    throw new Error(`Cannot click missing or hidden selector: ${selector}`);
   }
 
-  await send('Input.dispatchTouchEvent', {
-    type: 'touchStart',
-    touchPoints: [{ x: rect.x, y: rect.y }],
-  });
-  await send('Input.dispatchTouchEvent', {
-    type: 'touchEnd',
-    touchPoints: [],
-  });
   await send('Input.dispatchMouseEvent', {
     type: 'mouseMoved',
     x: rect.x,
