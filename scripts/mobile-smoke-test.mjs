@@ -62,7 +62,15 @@ try {
     if (!menu) return false;
     const rect = menu.getBoundingClientRect();
     const links = menu.querySelectorAll('a');
-    return rect.right <= window.innerWidth + 1 && rect.left > 0 && links.length >= 10 && menu.innerText.includes('Short-term rental');
+    const centerElement = document.elementFromPoint(rect.left + 24, rect.top + 96);
+    return (
+      document.querySelector('#mobile-menu')?.parentElement === document.body
+      && rect.right <= window.innerWidth + 1
+      && rect.left > 0
+      && links.length >= 10
+      && menu.contains(centerElement)
+      && menu.innerText.includes('Short-term rental')
+    );
   });
 
   await evaluate(() => document.querySelector('#mobile-menu nav a')?.click());

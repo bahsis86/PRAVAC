@@ -1,5 +1,6 @@
 import { ArrowRight, Briefcase, CalendarDays, Car, MapPin, MessageCircle, Phone, Route, X } from 'lucide-react';
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from '../router/Link.jsx';
 import { navItems, quickLinks } from '../data/siteData.js';
 import { useI18n } from '../i18n/I18nContext.jsx';
@@ -42,9 +43,18 @@ export default function MobileMenu({ open, onClose }) {
 
   if (!open) return null;
 
-  return (
-    <div id="mobile-menu" className="fixed inset-0 z-[999] bg-black/55 text-white backdrop-blur-sm lg:hidden" role="dialog" aria-modal="true" onClick={onClose}>
-      <aside className="ml-auto flex h-full w-[min(390px,92vw)] flex-col overflow-y-auto bg-pravac-blue shadow-[-24px_0_80px_rgba(0,0,0,0.34)]" onClick={(event) => event.stopPropagation()}>
+  return createPortal(
+    <div
+      id="mobile-menu"
+      className="fixed inset-0 z-[2147483647] isolate bg-black/60 text-white backdrop-blur-sm lg:hidden"
+      role="dialog"
+      aria-modal="true"
+      onClick={onClose}
+    >
+      <aside
+        className="pointer-events-auto ml-auto flex h-dvh w-[min(390px,92vw)] max-w-full flex-col overflow-y-auto bg-pravac-blue shadow-[-24px_0_80px_rgba(0,0,0,0.34)]"
+        onClick={(event) => event.stopPropagation()}
+      >
         <div className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-white/10 bg-pravac-blue/95 px-4 backdrop-blur">
           <button className="flex h-11 w-11 items-center justify-center rounded-md border border-white/10 bg-white/10 transition active:scale-95 active:bg-white/20" type="button" onClick={onClose} aria-label={t('common.closeMenu')}>
             <X size={28} />
@@ -101,6 +111,7 @@ export default function MobileMenu({ open, onClose }) {
           </div>
         </div>
       </aside>
-    </div>
+    </div>,
+    document.body,
   );
 }
