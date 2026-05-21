@@ -1,0 +1,12 @@
+export const extraServices = [
+  { id: 'child-seat', title: 'Child seat', description: 'Child seat for younger passengers.', price: 5, priceType: 'per_day', quantityLimited: true, availableQuantity: 5, requiresManagerConfirmation: false, active: true },
+  { id: 'booster-seat', title: 'Booster seat', description: 'Booster seat for older children.', price: 3, priceType: 'per_day', quantityLimited: true, availableQuantity: 6, requiresManagerConfirmation: false, active: true },
+  { id: 'additional-driver', title: 'Additional driver', description: 'Add one extra driver to the rental.', price: 20, priceType: 'per_booking', quantityLimited: false, availableQuantity: null, requiresManagerConfirmation: false, active: true },
+  { id: 'delivery-address', title: 'Delivery to address', description: 'Vehicle delivery to selected address.', price: 25, priceType: 'per_booking', quantityLimited: false, availableQuantity: null, requiresManagerConfirmation: true, active: true },
+  { id: 'return-address', title: 'Return from address', description: 'Vehicle return from selected address.', price: 25, priceType: 'per_booking', quantityLimited: false, availableQuantity: null, requiresManagerConfirmation: true, active: true },
+  { id: 'after-hours-pickup', title: 'After-hours pickup', description: 'Pickup outside standard working hours.', price: 30, priceType: 'per_booking', quantityLimited: false, availableQuantity: null, requiresManagerConfirmation: true, active: true },
+  { id: 'after-hours-return', title: 'After-hours return', description: 'Return outside standard working hours.', price: 30, priceType: 'per_booking', quantityLimited: false, availableQuantity: null, requiresManagerConfirmation: true, active: true },
+  { id: 'cross-border', title: 'Cross-border permission', description: 'Permission for cross-border travel.', price: 35, priceType: 'per_booking', quantityLimited: false, availableQuantity: null, requiresManagerConfirmation: true, active: true },
+  { id: 'extra-mileage', title: 'Extra mileage package', description: 'Adds 500 km to included mileage.', price: 45, priceType: 'per_booking', quantityLimited: false, availableQuantity: null, requiresManagerConfirmation: false, active: true },
+  { id: 'reduced-deposit', title: 'Reduced deposit / extra insurance', description: 'Optional package reducing deposit exposure.', price: 18, priceType: 'per_day', quantityLimited: false, availableQuantity: null, requiresManagerConfirmation: true, active: true },
+];
