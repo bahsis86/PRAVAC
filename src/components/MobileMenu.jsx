@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Link } from '../router/Link.jsx';
 import { navItems, quickLinks } from '../data/siteData.js';
 import { useI18n } from '../i18n/I18nContext.jsx';
-import { LanguageSelect } from './LanguageSelect.jsx';
+import { LanguageButtons } from './LanguageSelect.jsx';
 
 export default function MobileMenu({ open, onClose }) {
   const { t } = useI18n();
@@ -37,6 +37,10 @@ export default function MobileMenu({ open, onClose }) {
           <X size={28} />
         </button>
       </div>
+      <div className="container-shell pt-6">
+        <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-zinc-400">{t('common.language')}</p>
+        <LanguageButtons />
+      </div>
       <nav className="container-shell grid gap-3 pt-7 text-xl font-semibold">
         {navItems.map((item) => (
           <Link key={item.href} className="flex min-h-14 items-center rounded-md border border-white/10 bg-white/5 px-4 py-3 active:bg-white/15" href={item.href} onClick={onClose}>
@@ -45,7 +49,6 @@ export default function MobileMenu({ open, onClose }) {
         ))}
       </nav>
       <div className="container-shell mt-8 grid gap-4 pb-10">
-        <LanguageSelect className="w-full" />
         <div className="grid grid-cols-2 gap-3">
         {quickLinks.map((item) => (
           <Link key={item.href} className="rounded-md border border-white/10 bg-white/5 px-3 py-3 text-sm font-semibold text-zinc-200 active:bg-white/15" href={item.href} onClick={onClose}>

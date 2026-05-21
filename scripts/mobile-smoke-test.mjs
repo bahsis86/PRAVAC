@@ -17,17 +17,37 @@ try {
 
   await navigate(baseUrl);
   await expectEval('home route renders', () => location.pathname === '/PRAVAC/' && !document.body.innerText.includes('Page not found'));
-
-  await evaluate(() => document.querySelector('button[aria-controls="mobile-menu"]')?.click());
-  await waitFor(() => Boolean(document.querySelector('#mobile-menu')));
-  await expectEval('mobile menu opens', () => Boolean(document.querySelector('#mobile-menu')));
+  await expectEval('header language control is visible', () => {
+    const select = [...document.querySelectorAll('header select')].find((item) => {
+      const rect = item.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    });
+    if (!select) return false;
+    const rect = select.getBoundingClientRect();
+    return rect.width >= 60 && rect.height >= 40;
+  });
+  await expectEval('mobile quick navigation is visible', () => {
+    const nav = [...document.querySelectorAll('header nav')].find((item) => {
+      const rect = item.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    });
+    return Boolean(nav && nav.querySelectorAll('a').length >= 5);
+  });
 
   await evaluate(() => {
-    const select = document.querySelector('#mobile-menu select');
+    const select = [...document.querySelectorAll('header select')].find((item) => {
+      const rect = item.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    });
     select.value = 'en';
     select.dispatchEvent(new Event('change', { bubbles: true }));
   });
-  await expectEval('language switch works', () => document.querySelector('#mobile-menu select')?.value === 'en');
+  await waitFor(() => document.documentElement.lang === 'en');
+  await expectEval('header language switch works', () => document.documentElement.lang === 'en');
+
+  await tapSelector('button[aria-controls="mobile-menu"]');
+  await waitFor(() => Boolean(document.querySelector('#mobile-menu')));
+  await expectEval('mobile menu opens from real tap', () => Boolean(document.querySelector('#mobile-menu')));
 
   await evaluate(() => document.querySelector('#mobile-menu nav a')?.click());
   await waitFor(() => location.pathname === '/PRAVAC/sk/short-term-car-rental');
@@ -111,6 +131,63 @@ async function expectEval(label, fn) {
   const passed = await evaluate(fn);
   if (!passed) throw new Error(`Failed: ${label}`);
   console.log(`ok - ${label}`);
+}
+
+async function tapSelector(selector) {
+  const rect = await evaluateExpression(`(() => {
+    const element = document.querySelector(${JSON.stringify(selector)});
+    if (!element) return null;
+    const rect = element.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+      width: rect.width,
+      height: rect.height,
+    };
+  })()`);
+
+  if (!rect || rect.width <= 0 || rect.height <= 0) {
+    throw new Error(`Cannot tap missing or hidden selector: ${selector}`);
+  }
+
+  await send('Input.dispatchTouchEvent', {
+    type: 'touchStart',
+    touchPoints: [{ x: rect.x, y: rect.y }],
+  });
+  await send('Input.dispatchTouchEvent', {
+    type: 'touchEnd',
+    touchPoints: [],
+  });
+  await send('Input.dispatchMouseEvent', {
+    type: 'mouseMoved',
+    x: rect.x,
+    y: rect.y,
+    button: 'none',
+  });
+  await send('Input.dispatchMouseEvent', {
+    type: 'mousePressed',
+    x: rect.x,
+    y: rect.y,
+    button: 'left',
+    clickCount: 1,
+  });
+  await send('Input.dispatchMouseEvent', {
+    type: 'mouseReleased',
+    x: rect.x,
+    y: rect.y,
+    button: 'left',
+    clickCount: 1,
+  });
+}
+
+async function evaluateExpression(expression) {
+  const result = await send('Runtime.evaluate', {
+    expression,
+    awaitPromise: true,
+    returnByValue: true,
+  });
+  if (result.exceptionDetails) throw new Error(result.exceptionDetails.text);
+  return result.result?.value;
 }
 
 async function waitFor(fn, timeoutMs = 5000) {
