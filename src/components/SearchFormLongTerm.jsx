@@ -95,7 +95,7 @@ export default function SearchFormLongTerm() {
         <span className="field-label">{t('forms.comment')}</span>
         <textarea className="input-base min-h-20" name="customerComment" placeholder={copy.commentPlaceholder} />
       </label>
-      <button className="button-primary h-12 gap-2 lg:self-end" type="submit">
+      <button className="button-primary h-12 w-full gap-2 lg:self-end" type="submit">
         <Building2 size={18} /> {copy.submitLead}
       </button>
       {sent && (

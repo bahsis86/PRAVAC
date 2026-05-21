@@ -32,7 +32,7 @@ export default function SearchFormShortTerm() {
         <span className="field-label">{t('reservation.dropoffAt')}</span>
         <input className="input-base" name="dropoffAt" type="datetime-local" defaultValue="2026-05-09T09:00" required />
       </label>
-      <button className="button-primary h-12 gap-2" type="submit">
+      <button className="button-primary h-12 w-full gap-2" type="submit">
         <Search size={18} /> {t('forms.search')}
       </button>
     </form>

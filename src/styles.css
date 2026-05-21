@@ -44,6 +44,10 @@ img {
   max-width: 100%;
 }
 
+[id] {
+  scroll-margin-top: 96px;
+}
+
 .container-shell {
   width: min(1180px, calc(100% - 32px));
   margin-inline: auto;
@@ -309,6 +313,12 @@ img {
 }
 
 @media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
   .ambient-background__grid {
     opacity: 0.04;
     background-size: 96px 96px;

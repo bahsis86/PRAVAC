@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "vite build",
+    "build": "vite build && node scripts/create-spa-fallback.mjs",
     "audit:i18n": "node scripts/audit-i18n.mjs",
     "preview": "vite preview --host 127.0.0.1"
   },

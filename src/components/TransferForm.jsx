@@ -45,7 +45,7 @@ export default function TransferForm() {
           <textarea className="input-base min-h-32" name="comment" placeholder={t('forms.commentPlaceholder')} />
         </label>
         <div className="md:col-span-2 lg:col-span-3">
-          <button className="button-primary gap-2" type="submit">
+          <button className="button-primary w-full gap-2 md:w-auto" type="submit">
             <Send size={18} /> {t('forms.submit')}
           </button>
         </div>

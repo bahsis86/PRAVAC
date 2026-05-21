@@ -11,7 +11,7 @@ export default function Header() {
   const { t } = useI18n();
 
   return (
-    <header className="absolute left-0 right-0 top-0 z-40 border-b border-white/10 bg-black/55 text-white backdrop-blur-xl">
+    <header className="fixed left-0 right-0 top-0 z-40 border-b border-white/10 bg-black/75 text-white backdrop-blur-xl">
       <div className="container-shell flex h-20 items-center justify-between gap-6">
         <Link href="/sk" className="text-2xl font-black tracking-wide">
           PRAVAC
@@ -27,10 +27,12 @@ export default function Header() {
           <LanguageSelect />
         </div>
         <button
-          className="rounded-md p-2 hover:bg-white/10 lg:hidden"
+          className="relative z-10 flex h-11 w-11 items-center justify-center rounded-md border border-white/10 bg-white/10 text-white transition active:scale-95 active:bg-white/20 lg:hidden"
           type="button"
           onClick={() => setMenuOpen(true)}
           aria-label={t('common.openMenu')}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
         >
           <Menu size={28} />
         </button>

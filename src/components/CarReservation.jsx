@@ -627,7 +627,7 @@ function CustomerContactForm({ contact, copy, onChange, onSubmit }) {
           <textarea className="input-base min-h-24" name="customerComment" value={contact.customerComment} onChange={onChange} placeholder={copy.commentPlaceholder} />
         </label>
       </div>
-      <button className="button-primary mt-5 gap-2" type="submit">
+      <button className="button-primary mt-5 w-full gap-2 md:w-auto" type="submit">
         <CalendarDays size={18} /> {copy.requestBooking}
       </button>
     </form>
