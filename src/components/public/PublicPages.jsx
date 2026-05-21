@@ -19,7 +19,6 @@ import { useI18n } from '../../i18n/I18nContext.jsx';
 import { Link } from '../../router/Link.jsx';
 import { assetPath } from '../../utils/assetPath.js';
 import { appendCollectionItem, createId } from '../../utils/storage.js';
-import BrandLogo from '../BrandLogo.jsx';
 import CarReservation from '../CarReservation.jsx';
 import SearchFormLongTerm from '../SearchFormLongTerm.jsx';
 import TransferForm from '../TransferForm.jsx';
@@ -176,8 +175,8 @@ const heroModel = {
 };
 
 export function HomePage() {
-  const { t, language } = useI18n();
-  const c = copy[language] || copy.en;
+  const { dict, t } = useI18n();
+  const c = dict.public || copy.en;
   const featuredCars = useMemo(() => vehicleModels.filter((model) => model.featured).slice(0, 4), []);
 
   return (
@@ -230,24 +229,24 @@ export function HomePage() {
 }
 
 export function ShortTermPage() {
-  const { language } = useI18n();
-  const c = copy[language] || copy.en;
+  const { dict } = useI18n();
+  const c = dict.public || copy.en;
 
   return (
     <>
-      <PageIntro eyebrow="Short-term rental" title="Search, choose, request" text={c.shortIntro} />
+      <PageIntro eyebrow={c.shortEyebrow} title={c.shortTitle} text={c.shortIntro} />
       <CarReservation />
     </>
   );
 }
 
 export function LongTermPage() {
-  const { language } = useI18n();
-  const c = copy[language] || copy.en;
+  const { dict } = useI18n();
+  const c = dict.public || copy.en;
 
   return (
     <>
-      <PageIntro eyebrow="Long-term rental" title="Individual monthly offer" text={c.longIntro} />
+      <PageIntro eyebrow={c.longEyebrow} title={c.longTitle} text={c.longIntro} />
       <PublicSection>
         <SearchFormLongTerm />
       </PublicSection>
@@ -257,12 +256,12 @@ export function LongTermPage() {
 }
 
 export function TransferPage() {
-  const { language } = useI18n();
-  const c = copy[language] || copy.en;
+  const { dict } = useI18n();
+  const c = dict.public || copy.en;
 
   return (
     <>
-      <PageIntro eyebrow="Airport transfers" title="Request a transfer" text={c.transferIntro} />
+      <PageIntro eyebrow={c.transferEyebrow} title={c.transferTitle} text={c.transferIntro} />
       <TransferForm />
       <ContactCTA copy={c} />
     </>
@@ -270,26 +269,27 @@ export function TransferPage() {
 }
 
 export function CorporatePage() {
-  const { language } = useI18n();
-  const c = copy[language] || copy.en;
+  const { dict } = useI18n();
+  const c = dict.public || copy.en;
 
   return (
     <>
-      <PageIntro eyebrow="Corporate" title="Company car rental" text={c.corporateIntro} />
+      <PageIntro eyebrow={c.corporateEyebrow} title={c.corporateTitle} text={c.corporateIntro} />
       <PublicSection>
-        <BenefitRow items={['Flexible terms', 'Clear communication', 'Cars for teams']} />
+        <BenefitRow items={[c.benefits.flexibleTerms, c.benefits.clearCommunication, c.benefits.carsForTeams]} />
         <LeadForm
           button={c.submit}
           leadType="corporate"
           sentText={c.sent}
           fields={[
-            ['companyName', 'Company name'],
-            ['contactPerson', 'Contact person'],
-            ['phone', 'Phone', 'tel'],
-            ['email', 'Email', 'email'],
-            ['fleetNeed', 'Estimated fleet need'],
-            ['rentalPeriod', 'Rental period'],
+            ['companyName', c.leadFields.companyName],
+            ['contactPerson', c.leadFields.contactPerson],
+            ['phone', c.leadFields.phone, 'tel'],
+            ['email', c.leadFields.email, 'email'],
+            ['fleetNeed', c.leadFields.fleetNeed],
+            ['rentalPeriod', c.leadFields.rentalPeriod],
           ]}
+          copy={c}
         />
       </PublicSection>
     </>
@@ -297,26 +297,27 @@ export function CorporatePage() {
 }
 
 export function TripsPage() {
-  const { language } = useI18n();
-  const c = copy[language] || copy.en;
+  const { dict } = useI18n();
+  const c = dict.public || copy.en;
 
   return (
     <>
-      <PageIntro eyebrow="Trips" title="Private trips from Bratislava" text={c.tripsIntro} />
+      <PageIntro eyebrow={c.tripsEyebrow} title={c.tripsTitle} text={c.tripsIntro} />
       <PublicSection>
-        <BenefitRow items={['Pickup by agreement', 'Flexible destinations', 'Support before the trip']} />
+        <BenefitRow items={[c.benefits.pickupAgreement, c.benefits.flexibleDestinations, c.benefits.tripSupport]} />
         <LeadForm
           button={c.submit}
           leadType="trip"
           sentText={c.sent}
           fields={[
-            ['destination', 'Destination'],
-            ['date', 'Date', 'date'],
-            ['passengers', 'Passengers', 'number'],
-            ['name', 'Name'],
-            ['phone', 'Phone', 'tel'],
-            ['email', 'Email', 'email'],
+            ['destination', c.leadFields.destination],
+            ['date', c.leadFields.date, 'date'],
+            ['passengers', c.leadFields.passengers, 'number'],
+            ['name', c.leadFields.name],
+            ['phone', c.leadFields.phone, 'tel'],
+            ['email', c.leadFields.email, 'email'],
           ]}
+          copy={c}
         />
       </PublicSection>
     </>
@@ -324,20 +325,20 @@ export function TripsPage() {
 }
 
 export function ContactPage() {
-  const { language } = useI18n();
-  const c = copy[language] || copy.en;
+  const { dict } = useI18n();
+  const c = dict.public || copy.en;
 
   return (
     <>
-      <PageIntro eyebrow="Contact" title={c.contactTitle} text={c.contactText} />
+      <PageIntro eyebrow={c.contactEyebrow} title={c.contactTitle} text={c.contactText} />
       <ContactCTA copy={c} standalone />
     </>
   );
 }
 
 export function SimplePage({ pageKey }) {
-  const { dict, language } = useI18n();
-  const c = copy[language] || copy.en;
+  const { dict } = useI18n();
+  const c = dict.public || copy.en;
   const [title, text] = dict.pages.simple[pageKey] || dict.pages.simple.notFound;
 
   return (
@@ -431,7 +432,7 @@ function ContactCTA({ copy: c, standalone = false }) {
     <section className={`bg-pravac-blue text-white ${standalone ? 'py-12 md:py-20' : 'py-10 md:py-16'}`}>
       <div className="container-shell grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-pravac-orange">Contact</p>
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-pravac-orange">{c.contactEyebrow}</p>
           <h2 className="mt-3 text-3xl font-black md:text-5xl">{c.contactTitle}</h2>
           <p className="mt-4 max-w-2xl text-zinc-300">{c.contactText}</p>
           <div className="mt-6 grid gap-3 text-sm font-semibold text-zinc-200 sm:grid-cols-3">
@@ -448,7 +449,7 @@ function ContactCTA({ copy: c, standalone = false }) {
   );
 }
 
-function LeadForm({ button, fields, leadType, sentText }) {
+function LeadForm({ button, copy: c, fields, leadType, sentText }) {
   const [sent, setSent] = useState(false);
 
   const onSubmit = (event) => {
@@ -471,8 +472,8 @@ function LeadForm({ button, fields, leadType, sentText }) {
         <Field key={name} label={label} name={name} type={type} required />
       ))}
       <label className="md:col-span-2 lg:col-span-3">
-        <span className="field-label">Comment</span>
-        <textarea className="input-base min-h-28" name="comment" placeholder="Tell us what you need." />
+        <span className="field-label">{c.comment}</span>
+        <textarea className="input-base min-h-28" name="comment" placeholder={c.commentPlaceholder} />
       </label>
       <div className="md:col-span-2 lg:col-span-3">
         <button className="button-primary h-12 w-full gap-2 sm:w-auto" type="submit">

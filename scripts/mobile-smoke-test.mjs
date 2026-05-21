@@ -57,6 +57,13 @@ try {
   await tapSelector('button[aria-controls="mobile-menu"]');
   await waitFor(() => Boolean(document.querySelector('#mobile-menu')));
   await expectEval('mobile menu opens from real tap', () => Boolean(document.querySelector('#mobile-menu')));
+  await expectEval('mobile menu is a right drawer with service and quick links', () => {
+    const menu = document.querySelector('#mobile-menu aside');
+    if (!menu) return false;
+    const rect = menu.getBoundingClientRect();
+    const links = menu.querySelectorAll('a');
+    return rect.right <= window.innerWidth + 1 && rect.left > 0 && links.length >= 10 && menu.innerText.includes('Short-term rental');
+  });
 
   await evaluate(() => document.querySelector('#mobile-menu nav a')?.click());
   await waitFor(() => location.pathname === '/PRAVAC/sk/short-term-car-rental');
@@ -69,6 +76,29 @@ try {
   await evaluate(() => document.querySelector('.hero-panel form button[type="submit"]')?.click());
   await waitFor(() => location.hash === '' && window.scrollY > 300);
   await expectEval('hero search scrolls to reservation', () => window.scrollY > 300);
+
+  await navigate(baseUrl);
+  for (const [lang, expected] of [
+    ['sk', 'Krátkodobý prenájom'],
+    ['en', 'Short-term rental'],
+    ['ru', 'Краткосрочная аренда'],
+    ['tr', 'Kisa sureli kiralama'],
+  ]) {
+    await evaluate((next) => {
+      const select = [...document.querySelectorAll('header select')].find((item) => {
+        const rect = item.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0;
+      });
+      select.value = next;
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    }, lang);
+    await waitFor((next) => document.documentElement.lang === next, 5000, lang);
+    await expectEval(`${lang} language renders clean navigation`, (label) => document.body.innerText.includes(label), expected);
+    await expectEval(`${lang} language has no mojibake markers`, () => {
+      const text = document.body.innerText;
+      return !/(Рђ|Рџ|Рњ|Рґ|Р°|СЃ|С‚|ГЎ|ГЅ|Г©|Еѕ|ДЌ|в‚|вЂ)/.test(text);
+    });
+  }
 
   const routes = [
     '',
@@ -169,9 +199,9 @@ async function navigate(url) {
   await waitForEvent('Page.loadEventFired');
 }
 
-async function evaluate(fn) {
+async function evaluate(fn, ...args) {
   const result = await send('Runtime.evaluate', {
-    expression: `(${fn})()`,
+    expression: `(${fn})(...${JSON.stringify(args)})`,
     awaitPromise: true,
     returnByValue: true,
   });
@@ -179,8 +209,8 @@ async function evaluate(fn) {
   return result.result?.value;
 }
 
-async function expectEval(label, fn) {
-  const passed = await evaluate(fn);
+async function expectEval(label, fn, ...args) {
+  const passed = await evaluate(fn, ...args);
   if (!passed) throw new Error(`Failed: ${label}`);
   console.log(`ok - ${label}`);
 }
@@ -242,10 +272,10 @@ async function evaluateExpression(expression) {
   return result.result?.value;
 }
 
-async function waitFor(fn, timeoutMs = 5000) {
+async function waitFor(fn, timeoutMs = 5000, ...args) {
   const startedAt = Date.now();
   while (Date.now() - startedAt < timeoutMs) {
-    if (await evaluate(fn)) return;
+    if (await evaluate(fn, ...args)) return;
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
   throw new Error('Timed out waiting for browser condition.');
