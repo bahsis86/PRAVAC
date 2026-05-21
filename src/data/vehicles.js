@@ -22,6 +22,24 @@ const vehicleImages = {
   'renault-trafic': image('Renault_Trafic_Combi_%28III%29_%E2%80%93_h_29062016.jpg'),
 };
 
+const vehicleBodyTypes = {
+  'skoda-fabia': 'hatchback',
+  'skoda-octavia': 'sedan',
+  'skoda-superb': 'wagon',
+  'skoda-kodiaq': 'suv',
+  'volkswagen-golf': 'hatchback',
+  'volkswagen-passat-variant': 'wagon',
+  'volkswagen-tiguan': 'suv',
+  'toyota-corolla': 'wagon',
+  'toyota-rav4': 'suv',
+  'hyundai-i30': 'hatchback',
+  'kia-ceed': 'hatchback',
+  'bmw-3-series': 'sedan',
+  'audi-a4-avant': 'wagon',
+  'mercedes-v-class': 'minivan',
+  'renault-trafic': 'minivan',
+};
+
 export const vehicleModels = [
   ['skoda-fabia', '\u0160koda', 'Fabia', 'Economy', 5, 5, 'Manual', 'Petrol', 2, false, false, true, true, 2024, 29, 300, 250, 0.18, ['city', 'budget']],
   ['skoda-octavia', '\u0160koda', 'Octavia', 'Compact', 5, 5, 'Automatic', 'Petrol', 4, false, false, true, true, 2024, 39, 400, 250, 0.2, ['popular', 'business']],
@@ -45,6 +63,7 @@ export const vehicleModels = [
   model,
   title: `${brand} ${model}`,
   category,
+  bodyType: vehicleBodyTypes[slug] || 'sedan',
   shortDescription: `${category} car for Bratislava, airport transfers and travel.`,
   description: `${brand} ${model} is prepared for clean, comfortable and transparent PRAVAC rentals.`,
   seats,

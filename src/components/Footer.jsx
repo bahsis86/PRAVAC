@@ -1,37 +1,35 @@
-import { Clock, Facebook, Instagram, Linkedin, Mail } from 'lucide-react';
-import { footerNav, quickLinks } from '../data/siteData.js';
+import { Mail, MapPin, Phone } from 'lucide-react';
+import { navItems, quickLinks } from '../data/siteData.js';
 import { useI18n } from '../i18n/I18nContext.jsx';
 import { Link } from '../router/Link.jsx';
+import BrandLogo from './BrandLogo.jsx';
+
+const secondaryLinks = [
+  { key: 'scooters', href: '/sk/scooters' },
+  { key: 'franchise', href: '/sk/franchise' },
+];
 
 export default function Footer() {
   const { t } = useI18n();
 
   return (
     <footer className="border-t border-white/10 bg-black text-white">
-      <div className="container-shell grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.2fr_0.8fr_1fr_1.2fr]">
+      <div className="container-shell grid gap-9 py-12 md:grid-cols-[1.2fr_0.8fr_1fr]">
         <div>
-          <Link href="/sk" className="text-3xl font-black tracking-wide">
-            PRAVAC
-          </Link>
-          <p className="mt-4 text-zinc-300">{t('common.slogan')}</p>
-          <div className="mt-6 flex gap-3">
-            {[Facebook, Instagram, Linkedin, Mail].map((Icon, index) => (
-              <span key={index} className="flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-white">
-                <Icon size={18} />
-              </span>
-            ))}
-          </div>
-        </div>
-        <FooterColumn title={t('common.quickLinks')} items={quickLinks} />
-        <FooterColumn title={t('common.navigation')} items={footerNav} />
-        <div>
-          <h2 className="text-sm font-bold uppercase tracking-wide text-zinc-400">{t('common.contact')}</h2>
-          <ul className="mt-4 grid gap-3 text-sm text-zinc-300">
-            <li className="flex gap-3"><Clock size={18} className="text-pravac" /> {t('common.workingHours')}</li>
-            <li className="flex gap-3"><Mail size={18} className="text-pravac" /> {t('common.email')}</li>
-            <li>{t('common.phone')}</li>
-            <li>{t('common.address')}</li>
+          <BrandLogo imageClassName="h-12" />
+          <p className="mt-5 max-w-sm text-sm leading-6 text-zinc-300">{t('common.slogan')}</p>
+          <ul className="mt-5 grid gap-2 text-sm text-zinc-300">
+            <li className="flex gap-3"><Phone size={17} className="text-pravac" /> {t('common.phone')}</li>
+            <li className="flex gap-3"><Mail size={17} className="text-pravac" /> {t('common.email')}</li>
+            <li className="flex gap-3"><MapPin size={17} className="text-pravac" /> {t('common.address')}</li>
           </ul>
+        </div>
+        <div>
+          <FooterColumn title={t('common.navigation')} items={navItems} />
+        </div>
+        <div className="grid gap-7 sm:grid-cols-2 md:grid-cols-1">
+          <FooterColumn title={t('common.quickLinks')} items={quickLinks} />
+          <FooterColumn title={t('common.more')} items={secondaryLinks} />
         </div>
       </div>
       <div className="border-t border-white/10 py-5 text-center text-xs text-zinc-400">

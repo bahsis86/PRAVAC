@@ -24,7 +24,13 @@ export default function Hero({ title, subtitle, image, children, compact = false
           aria-hidden="true"
         />
       ))}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_74%_18%,rgba(169,21,36,0.12),transparent_34%),linear-gradient(110deg,rgba(3,3,4,0.96),rgba(8,8,10,0.82)_54%,rgba(8,8,10,0.58))]" />
+      <img
+        className="pointer-events-none absolute right-[-8%] top-24 z-[1] w-[68rem] max-w-none opacity-[0.06]"
+        src="/assets/pravac/patterns/pravac-swoosh-background.svg"
+        alt=""
+        aria-hidden="true"
+      />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_74%_18%,rgba(245,155,18,0.12),transparent_34%),linear-gradient(110deg,rgba(6,46,69,0.96),rgba(6,46,69,0.82)_54%,rgba(6,46,69,0.58))]" />
       <AmbientBackground variant="hero" />
       <div className="absolute inset-x-0 top-0 z-[1] h-px bg-gradient-to-r from-transparent via-pravac/80 to-transparent" />
       <div className="container-shell relative z-10 pb-10 pt-32 md:pb-16">

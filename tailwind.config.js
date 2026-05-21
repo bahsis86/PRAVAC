@@ -6,15 +6,20 @@ export default {
       colors: {
         graphite: '#151515',
         ink: '#222222',
-        pravac: '#a91524',
+        pravac: '#F59B12',
+        'pravac-orange': '#F59B12',
+        'pravac-blue': '#062E45',
         wine: '#7b1020',
-        smoke: '#f4f5f7',
+        smoke: '#F6F8F9',
+        paper: '#F6F8F9',
+        warm: '#FFF1D5',
       },
       boxShadow: {
         soft: '0 20px 60px rgba(21, 21, 21, 0.12)',
       },
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        heading: ['Space Grotesk', 'Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
     },
   },

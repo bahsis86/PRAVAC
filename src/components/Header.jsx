@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { navItems } from '../data/siteData.js';
 import { useI18n } from '../i18n/I18nContext.jsx';
 import { Link } from '../router/Link.jsx';
+import BrandLogo from './BrandLogo.jsx';
 import { LanguageSelect } from './LanguageSelect.jsx';
 import MobileMenu from './MobileMenu.jsx';
 
@@ -12,14 +13,12 @@ export default function Header() {
   const openMenu = () => setMenuOpen(true);
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-40 border-b border-white/10 bg-black/75 text-white backdrop-blur-xl">
+    <header className="fixed left-0 right-0 top-0 z-40 border-b border-white/10 bg-pravac-blue/95 text-white backdrop-blur-xl">
       <div className="container-shell flex h-20 items-center justify-between gap-3">
-        <Link href="/sk" className="shrink-0 text-2xl font-black tracking-wide">
-          PRAVAC
-        </Link>
+        <BrandLogo imageClassName="h-9 sm:h-10" />
         <nav className="hidden items-center gap-6 text-sm font-semibold text-zinc-200 lg:flex">
           {navItems.map((item) => (
-            <Link key={item.href} className="transition hover:text-red-200" href={item.href}>
+            <Link key={item.href} className="transition hover:text-pravac-orange" href={item.href}>
               {t(`nav.${item.key}`)}
             </Link>
           ))}
@@ -44,7 +43,7 @@ export default function Header() {
           </button>
         </div>
       </div>
-      <nav className="border-t border-white/10 bg-black/85 lg:hidden" aria-label={t('common.navigation')}>
+      <nav className="border-t border-white/10 bg-pravac-blue/95 lg:hidden" aria-label={t('common.navigation')}>
         <div className="container-shell flex gap-2 overflow-x-auto py-2">
           {navItems.map((item) => (
             <Link

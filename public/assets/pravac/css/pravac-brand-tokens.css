@@ -1,0 +1,21 @@
+:root {
+  --pravac-orange: #F59B12;
+  --pravac-blue: #062E45;
+  --pravac-blue-soft: #0A3A56;
+  --pravac-paper: #F6F8F9;
+  --pravac-warm: #FFF1D5;
+  --pravac-border: #D9E2E7;
+}
+
+.pravac-brand-bg {
+  background:
+    radial-gradient(circle at 72% 18%, rgba(245, 155, 18, .20), transparent 28%),
+    linear-gradient(135deg, #F6F8F9 0%, #EEF3F5 52%, #FFF1D5 100%);
+}
+
+.pravac-logo-watermark {
+  background-image: url('/assets/patterns/pravac-swoosh-background.svg');
+  background-repeat: no-repeat;
+  background-position: right top;
+  background-size: min(760px, 70vw) auto;
+}

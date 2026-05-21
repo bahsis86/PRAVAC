@@ -22,6 +22,7 @@ import { findAvailableVehicleModels } from '../utils/availability.js';
 import { getLocationName } from '../utils/displayText.js';
 import { calculatePriceBreakdown } from '../utils/pricing.js';
 import { appendCollectionItem, createId, getMockStore, loadCollection, saveCollection } from '../utils/storage.js';
+import VehicleImagePlaceholder from './VehicleImagePlaceholder.jsx';
 import AmbientBackground from './visual/AmbientBackground.jsx';
 import GlowCard from './visual/GlowCard.jsx';
 
@@ -35,6 +36,7 @@ const defaultSearch = {
 };
 
 const defaultFilters = {
+  bodyType: '',
   category: '',
   transmission: '',
   fuelType: '',
@@ -46,6 +48,17 @@ const defaultFilters = {
   isFamily: false,
   crossBorderAllowed: false,
 };
+
+const bodyTypes = [
+  { id: 'sedan', label: 'Sedan', icon: '/assets/pravac/body-cards/body-sedan-card.svg' },
+  { id: 'hatchback', label: 'Hatchback', icon: '/assets/pravac/body-cards/body-hatchback-card.svg' },
+  { id: 'suv', label: 'SUV', icon: '/assets/pravac/body-cards/body-suv-card.svg' },
+  { id: 'wagon', label: 'Wagon', icon: '/assets/pravac/body-cards/body-wagon-card.svg' },
+  { id: 'coupe', label: 'Coupé', icon: '/assets/pravac/body-cards/body-coupe-card.svg' },
+  { id: 'convertible', label: 'Cabrio', icon: '/assets/pravac/body-cards/body-convertible-card.svg' },
+  { id: 'minivan', label: 'Minivan', icon: '/assets/pravac/body-cards/body-minivan-card.svg' },
+  { id: 'pickup', label: 'Pickup', icon: '/assets/pravac/body-cards/body-pickup-card.svg' },
+];
 
 export default function CarReservation() {
   const { t, language } = useI18n();
@@ -138,6 +151,10 @@ export default function CarReservation() {
   const updateFilter = (event) => {
     const { name, type, checked, value } = event.target;
     setFilters((current) => ({ ...current, [name]: type === 'checkbox' ? checked : value }));
+  };
+
+  const updateBodyType = (bodyType) => {
+    setFilters((current) => ({ ...current, bodyType: current.bodyType === bodyType ? '' : bodyType }));
   };
 
   const clearFilters = () => {
@@ -266,8 +283,10 @@ export default function CarReservation() {
                   />
                   <VehicleResults
                     baseCount={baseResults?.available.length || 0}
+                    bodyType={filters.bodyType}
                     copy={copy}
                     language={language}
+                    onBodyTypeChange={updateBodyType}
                     onChoose={chooseVehicle}
                     pickupLocation={pickupLocation}
                     results={filteredResults}
@@ -417,31 +436,66 @@ function VehicleFilterPanel({ categories, clearFilters, copy, filters, fuelTypes
   );
 }
 
-function VehicleResults({ baseCount, copy, language, onChoose, pickupLocation, results, returnLocation, store }) {
+function VehicleResults({ baseCount, bodyType, copy, language, onBodyTypeChange, onChoose, pickupLocation, results, returnLocation, store }) {
   if (baseCount === 0) {
     return <EmptyState title={copy.noAvailableTitle} text={copy.noAvailableText} />;
   }
 
-  if (results.available.length === 0) {
-    return <EmptyState title={copy.noFilterTitle} text={copy.noFilterText} />;
-  }
-
   return (
     <div className="grid gap-5">
-      {results.available.map((item) => (
-        <VehicleResultCard
-          copy={copy}
-          item={item}
-          key={item.model.id}
-          language={language}
-          onChoose={() => onChoose(item)}
-          pickupLocation={pickupLocation}
-          results={results}
-          returnLocation={returnLocation}
-          store={store}
-        />
-      ))}
+      <BodyTypeFilter activeBodyType={bodyType} copy={copy} onChange={onBodyTypeChange} />
+      {results.available.length === 0 ? (
+        <EmptyState title={copy.noFilterTitle} text={copy.noFilterText} />
+      ) : (
+        results.available.map((item) => (
+          <VehicleResultCard
+            copy={copy}
+            item={item}
+            key={item.model.id}
+            language={language}
+            onChoose={() => onChoose(item)}
+            pickupLocation={pickupLocation}
+            results={results}
+            returnLocation={returnLocation}
+            store={store}
+          />
+        ))
+      )}
     </div>
+  );
+}
+
+function BodyTypeFilter({ activeBodyType, copy, onChange }) {
+  return (
+    <section className="overflow-hidden rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <h3 className="text-lg font-black text-graphite">{copy.bodyType || 'Body type'}</h3>
+        {activeBodyType && (
+          <button className="text-sm font-bold text-pravac" type="button" onClick={() => onChange(activeBodyType)}>
+            {copy.all}
+          </button>
+        )}
+      </div>
+      <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-4 md:overflow-visible md:px-0 md:pb-0">
+        {bodyTypes.map((type) => {
+          const active = activeBodyType === type.id;
+          return (
+            <button
+              key={type.id}
+              className={`group min-w-[156px] snap-start rounded-lg border p-3 text-left transition md:min-w-0 ${active ? 'border-pravac-orange bg-[#FFF8E8] shadow-[0_0_0_4px_rgba(245,155,18,0.16)]' : 'border-zinc-200 bg-white hover:border-pravac-orange/70 hover:bg-[#FFF1D5]/35'}`}
+              type="button"
+              onClick={() => onChange(type.id)}
+              aria-pressed={active}
+            >
+              <img className="aspect-[4/3] w-full object-contain" src={type.icon} alt="" aria-hidden="true" />
+              <span className={`mt-2 block text-center text-sm font-black ${active ? 'text-pravac-blue' : 'text-graphite group-hover:text-pravac-blue'}`}>
+                {type.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 
@@ -661,7 +715,6 @@ function BookingSummary({ breakdown, copy, language, pickupLocation, returnLocat
 
 function PriceBreakdown({ breakdown, copy }) {
   const rows = [
-    [copy.rentalDays, breakdown.rentalDays],
     [copy.basePrice, `${breakdown.basePrice} €`],
     ...(breakdown.discountAmount > 0 ? [[`${copy.durationDiscount} (${breakdown.discountPercent}%)`, `-${breakdown.discountAmount} €`, 'positive']] : []),
     [copy.locationFees, `${breakdown.locationFees} €`],
@@ -671,19 +724,25 @@ function PriceBreakdown({ breakdown, copy }) {
   ];
 
   return (
-    <div className="mt-5 rounded-md border border-white/10 bg-black/20 p-4">
-      <dl className="grid gap-2 text-sm">
-        {rows.map(([label, value, tone]) => (
-          <div key={label} className="flex justify-between gap-4 border-b border-zinc-200 pb-2 last:border-0">
-            <dt className={tone === 'positive' ? 'font-semibold text-emerald-700' : 'text-zinc-600'}>{label}</dt>
-            <dd className={`font-black ${tone === 'positive' ? 'text-emerald-700' : 'text-ink'}`}>{value}</dd>
-          </div>
-        ))}
-      </dl>
-      <div className="mt-4 rounded-md border border-pravac/25 bg-pravac/10 p-4 shadow-[0_18px_44px_rgba(169,21,36,0.12)]">
+    <div className="mt-5 rounded-md border border-zinc-200 bg-white p-4">
+      <div className="rounded-md border border-pravac/25 bg-pravac/10 p-4 shadow-[0_18px_44px_rgba(169,21,36,0.12)]">
         <p className="text-sm font-bold text-zinc-500">{copy.estimatedTotal}</p>
         <p className="text-3xl font-black text-pravac">{breakdown.estimatedTotal} €</p>
+        <p className="mt-2 text-sm font-semibold text-zinc-600">
+          {copy.rentalDays}: {breakdown.rentalDays} | {copy.depositFrom}: {breakdown.depositFrom} €
+        </p>
       </div>
+      <details className="mt-3 rounded-md border border-zinc-200 bg-smoke p-3">
+        <summary className="cursor-pointer text-sm font-bold text-graphite">{copy.priceDetails || 'Price details'}</summary>
+        <dl className="mt-3 grid gap-2 text-sm">
+          {rows.map(([label, value, tone]) => (
+            <div key={label} className="flex justify-between gap-4 border-b border-zinc-200 pb-2 last:border-0">
+              <dt className={tone === 'positive' ? 'font-semibold text-emerald-700' : 'text-zinc-600'}>{label}</dt>
+              <dd className={`font-black ${tone === 'positive' ? 'text-emerald-700' : 'text-ink'}`}>{value}</dd>
+            </div>
+          ))}
+        </dl>
+      </details>
     </div>
   );
 }
@@ -805,34 +864,7 @@ function CheckboxFilter({ label, ...props }) {
 }
 
 function VehicleMedia({ model, large = false }) {
-  if (model.image?.type === 'remote') {
-    return (
-      <div className={`relative flex items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_50%_18%,rgba(255,255,255,0.98),rgba(244,245,247,0.92)_52%,rgba(21,21,21,0.08))] ${large ? 'h-72' : 'h-full min-h-56 lg:min-h-full'}`}>
-        <div className="absolute inset-x-8 bottom-8 h-8 rounded-full bg-black/15 blur-xl" />
-        <div className="absolute left-8 top-8 h-28 w-28 rounded-full bg-pravac/10 blur-3xl" />
-        <img
-          className="relative z-10 h-full max-h-[82%] w-full object-contain px-5 py-7"
-          src={model.image.url}
-          alt={model.title}
-          style={{ objectPosition: model.image.position || 'center' }}
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className={`relative flex items-end overflow-hidden p-5 text-white ${large ? 'h-72' : 'h-full min-h-56 lg:min-h-full'}`}
-      style={{ background: `radial-gradient(circle at 22% 16%, rgba(255,255,255,0.22), transparent 30%), linear-gradient(135deg, ${model.image?.from || '#171717'}, ${model.image?.to || '#a91524'})` }}
-    >
-      <div className="absolute -right-10 bottom-5 h-20 w-64 rounded-full border-8 border-white/20" />
-      <div className="absolute right-8 bottom-10 h-10 w-40 rounded-t-full bg-white/25" />
-      <div className="relative">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/70">{model.category}</p>
-        <p className="mt-1 text-2xl font-black">{model.title}</p>
-      </div>
-    </div>
-  );
+  return <VehicleImagePlaceholder className={large ? 'h-72' : 'h-full min-h-56 lg:min-h-full'} model={model} />;
 }
 
 function Spec({ icon, text }) {
@@ -926,6 +958,7 @@ const flowCopy = {
     days: 'dni',
     resultsEyebrow: 'Dostupne auta',
     resultsTitle: 'Auta dostupne pre vas termin',
+    bodyType: 'Typ karoserie',
     availableCars: 'dostupnych aut',
     beforeFilters: 'pred filtrami',
     filters: 'Filtre',
@@ -983,6 +1016,7 @@ const flowCopy = {
     locationFees: 'Poplatky za lokacie',
     extraServices: 'Doplnkove sluzby',
     prepayment: 'Predplatba',
+    priceDetails: 'Detail ceny',
     confirmationTitle: 'Dopyt na rezervaciu bol prijaty',
     confirmationText: 'Manazer PRAVAC potvrdi dostupnost a posle dalsie instrukcie k platbe.',
     requestNumber: 'Cislo dopytu',
@@ -1011,6 +1045,7 @@ const flowCopy = {
     days: 'days',
     resultsEyebrow: 'Available cars',
     resultsTitle: 'Available cars for your dates',
+    bodyType: 'Body type',
     availableCars: 'available cars',
     beforeFilters: 'before filters',
     filters: 'Filters',
@@ -1068,6 +1103,7 @@ const flowCopy = {
     locationFees: 'Location fees',
     extraServices: 'Extra services',
     prepayment: 'Prepayment',
+    priceDetails: 'Price details',
     confirmationTitle: 'Your booking request has been received',
     confirmationText: 'PRAVAC manager will confirm availability and payment instructions.',
     requestNumber: 'Request number',
@@ -1155,6 +1191,7 @@ flowCopy.ru = {
   locationFees: 'Сборы за локации',
   extraServices: 'Доп. услуги',
   prepayment: 'Предоплата',
+  priceDetails: 'Детали цены',
   confirmationTitle: 'Ваша заявка на бронирование получена',
   confirmationText: 'Менеджер PRAVAC подтвердит доступность и отправит инструкции по оплате.',
   requestNumber: 'Номер заявки',
@@ -1171,6 +1208,7 @@ flowCopy.tr = {
   searchIntro: 'Lokasyon, tarih ve saat secin. Iletisim bilgileri yalnizca arac ve tahmini fiyat gorulduktan sonra istenir.',
   trustItems: ['Seffaf tahmini fiyat', 'Bratislava ve havalimanlari', 'Hesap gerekmez', 'Gerektiginde yonetici onayi'],
   searchCars: 'Arac ara',
+  bodyType: 'Gövde tipi',
   chooseCar: 'Arac sec',
 };
 

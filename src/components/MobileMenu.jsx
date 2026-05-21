@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { Link } from '../router/Link.jsx';
 import { navItems, quickLinks } from '../data/siteData.js';
 import { useI18n } from '../i18n/I18nContext.jsx';
+import BrandLogo from './BrandLogo.jsx';
 import { LanguageButtons } from './LanguageSelect.jsx';
 
 export default function MobileMenu({ open, onClose }) {
@@ -30,9 +31,7 @@ export default function MobileMenu({ open, onClose }) {
   return (
     <div id="mobile-menu" className="fixed inset-0 z-[999] overflow-y-auto bg-black text-white lg:hidden" role="dialog" aria-modal="true">
       <div className="container-shell sticky top-0 z-10 flex h-20 items-center justify-between border-b border-white/10 bg-black/95 backdrop-blur">
-        <Link className="text-2xl font-black tracking-wide" href="/sk" onClick={onClose}>
-          PRAVAC
-        </Link>
+        <BrandLogo imageClassName="h-10" onClick={onClose} />
         <button className="flex h-11 w-11 items-center justify-center rounded-md border border-white/10 bg-white/10 transition active:scale-95 active:bg-white/20" type="button" onClick={onClose} aria-label={t('common.closeMenu')}>
           <X size={28} />
         </button>

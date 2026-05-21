@@ -18,9 +18,11 @@ import { vehicleModels } from '../../data/vehicles.js';
 import { useI18n } from '../../i18n/I18nContext.jsx';
 import { Link } from '../../router/Link.jsx';
 import { appendCollectionItem, createId } from '../../utils/storage.js';
+import BrandLogo from '../BrandLogo.jsx';
 import CarReservation from '../CarReservation.jsx';
 import SearchFormLongTerm from '../SearchFormLongTerm.jsx';
 import TransferForm from '../TransferForm.jsx';
+import VehicleImagePlaceholder from '../VehicleImagePlaceholder.jsx';
 
 const contact = {
   phone: '+421 999 999 999',
@@ -38,8 +40,12 @@ const copy = {
     returnDate: 'Return date',
     showCars: 'Show cars',
     services: 'Services',
+    servicesTitle: 'Choose what you need',
     featured: 'Featured cars',
+    featuredTitle: 'Popular choices',
     why: 'Why PRAVAC',
+    whyTitle: 'Simple rental support',
+    open: 'Open',
     contactTitle: 'Need a car or transfer?',
     contactText: 'Send a request and a manager will confirm the details.',
     requestCar: 'Request a car',
@@ -67,8 +73,12 @@ copy.sk = {
   returnDate: 'Datum vratenia',
   showCars: 'Ukazat auta',
   services: 'Sluzby',
+  servicesTitle: 'Vyberte si sluzbu',
   featured: 'Vybrane auta',
+  featuredTitle: 'Oblubene auta',
   why: 'Preco PRAVAC',
+  whyTitle: 'Jednoducha podpora prenajmu',
+  open: 'Otvorit',
   contactTitle: 'Potrebujete auto alebo transfer?',
   contactText: 'Poslite dopyt a manazer potvrdi detaily.',
   requestCar: 'Poslat dopyt',
@@ -123,8 +133,12 @@ copy.tr = {
   returnDate: 'Iade tarihi',
   showCars: 'Araclari goster',
   services: 'Hizmetler',
+  servicesTitle: 'Ihtiyacinizi secin',
   featured: 'One cikan araclar',
+  featuredTitle: 'Populer secenekler',
   why: 'Neden PRAVAC',
+  whyTitle: 'Kolay kiralama destegi',
+  open: 'Ac',
   contactTitle: 'Arac veya transfer mi gerekiyor?',
   contactText: 'Talep gonderin, yonetici detaylari onaylasin.',
   requestCar: 'Talep gonder',
@@ -153,53 +167,58 @@ const whyItems = [
   'Bratislava and airport pickup',
   'Flexible rental periods',
   'Transparent estimated pricing',
-  'Manager support',
 ];
+
+const heroModel = {
+  title: 'PRAVAC rental car',
+  bodyType: 'estate',
+};
 
 export function HomePage() {
   const { t, language } = useI18n();
   const c = copy[language] || copy.en;
-  const featuredCars = useMemo(() => vehicleModels.filter((model) => model.featured).slice(0, 6), []);
+  const featuredCars = useMemo(() => vehicleModels.filter((model) => model.featured).slice(0, 4), []);
 
   return (
     <>
-      <section className="relative overflow-hidden bg-graphite pt-32 text-white md:pt-36">
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(5,5,6,0.98),rgba(18,18,20,0.92)_58%,rgba(80,8,18,0.72))]" />
-        <div className="container-shell relative z-10 grid gap-8 pb-10 md:pb-14 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
+      <section className="relative overflow-hidden bg-graphite pt-28 text-white md:pt-32">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(5,5,6,0.98),rgba(8,47,73,0.9)_58%,rgba(245,154,11,0.28))]" />
+        <img
+          className="pointer-events-none absolute right-[-10%] top-20 w-[34rem] max-w-none opacity-[0.06] md:w-[48rem]"
+          src="/assets/pravac/logo/pravac-mark.svg"
+          alt=""
+          aria-hidden="true"
+        />
+        <div className="pointer-events-none absolute left-[8%] top-24 h-48 w-[78%] rounded-[100%] border-t-4 border-pravac-orange/40" />
+        <div className="pointer-events-none absolute bottom-0 right-[-12%] h-64 w-64 rounded-full bg-pravac-orange/15 blur-3xl" />
+        <div className="container-shell relative z-10 grid gap-7 pb-8 md:pb-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
           <div className="max-w-2xl">
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-red-200">PRAVAC Rent a Car</p>
-            <h1 className="mt-4 text-4xl font-black leading-tight md:text-6xl">{c.heroTitle}</h1>
-            <p className="mt-5 max-w-xl text-base leading-7 text-zinc-200">{c.heroText}</p>
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-pravac-orange">PRAVAC Rent a Car</p>
+            <h1 className="mt-3 text-4xl font-bold leading-tight md:text-6xl">{c.heroTitle}</h1>
+            <p className="mt-4 max-w-xl text-base leading-7 text-zinc-200">{c.heroText}</p>
+            <TrustStrip className="mt-6" />
           </div>
+          <div className="grid gap-4">
+            <VehicleImagePlaceholder className="h-44 rounded-lg md:h-64 lg:h-72" hero model={heroModel} />
           <div className="hero-panel">
             <SimpleHeroSearch copy={c} />
+          </div>
           </div>
         </div>
       </section>
 
-      <PublicSection eyebrow={c.services} title="Choose what you need">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+      <section className="border-b border-zinc-200 bg-white py-4">
+        <div className="container-shell grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
           {shortcuts.map((item) => (
-            <ServiceShortcut item={item} key={item.key} label={t(`nav.${item.key}`)} />
+            <ServiceShortcut copy={c} item={item} key={item.key} label={t(`nav.${item.key}`)} />
           ))}
         </div>
-      </PublicSection>
+      </section>
 
-      <PublicSection eyebrow={c.featured} id="featured-cars" title="Popular choices">
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <PublicSection eyebrow={c.featured} id="featured-cars" title={c.featuredTitle || copy.en.featuredTitle}>
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {featuredCars.map((model) => (
             <CompactCarCard copy={c} key={model.id} model={model} />
-          ))}
-        </div>
-      </PublicSection>
-
-      <PublicSection eyebrow={c.why} muted title="Simple rental support">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {whyItems.map((item) => (
-            <div className="rounded-lg border border-zinc-200 bg-white p-5" key={item}>
-              <CheckCircle2 className="text-pravac" size={24} />
-              <p className="mt-4 text-lg font-black text-graphite">{item}</p>
-            </div>
           ))}
         </div>
       </PublicSection>
@@ -335,30 +354,48 @@ function SimpleHeroSearch({ copy: c }) {
   };
 
   return (
-    <form className="grid gap-3 rounded-lg bg-white p-4 text-ink shadow-soft sm:grid-cols-2" onSubmit={onSubmit}>
+    <form className="grid gap-3 rounded-lg bg-white p-4 text-ink shadow-soft sm:grid-cols-3" onSubmit={onSubmit}>
       <LocationSelect label={c.pickup} name="pickupLocation" />
-      <LocationSelect label={c.return} name="returnLocation" />
       <Field label={c.pickupDate} name="pickupDate" type="date" defaultValue="2026-05-06" />
       <Field label={c.returnDate} name="returnDate" type="date" defaultValue="2026-05-09" />
-      <button className="button-primary h-12 w-full gap-2 sm:col-span-2" type="submit">
+      <button className="button-primary h-12 w-full gap-2 sm:col-span-3" type="submit">
         <Car size={18} /> {c.showCars}
       </button>
     </form>
   );
 }
 
-function ServiceShortcut({ item, label }) {
+function ServiceShortcut({ copy: c, item, label }) {
   const Icon = item.icon;
 
   return (
-    <Link className="group rounded-lg border border-zinc-200 bg-white p-5 transition hover:-translate-y-1 hover:border-pravac hover:shadow-soft" href={item.href}>
-      <Icon className="text-pravac" size={26} />
-      <h3 className="mt-5 text-lg font-black text-graphite">{label}</h3>
-      <p className="mt-2 text-sm leading-6 text-zinc-600">{item.text}</p>
-      <span className="mt-5 inline-flex items-center gap-2 text-sm font-black text-pravac">
-        Open <ArrowRight size={16} />
+    <Link className="group flex min-h-14 items-center justify-between gap-3 rounded-md border border-zinc-200 bg-white px-3 py-2 transition hover:border-pravac-orange hover:bg-orange-50/60" href={item.href}>
+      <span className="flex min-w-0 items-center gap-3">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-pravac-blue text-white">
+          <Icon size={18} />
+        </span>
+        <span className="min-w-0">
+          <span className="block truncate text-sm font-bold text-graphite">{label}</span>
+          <span className="block truncate text-xs text-zinc-500">{item.text}</span>
+        </span>
+      </span>
+      <span className="shrink-0 text-pravac-orange">
+        <ArrowRight size={17} aria-label={c.open || copy.en.open} />
       </span>
     </Link>
+  );
+}
+
+function TrustStrip({ className = '' }) {
+  return (
+    <div className={`grid gap-2 text-sm font-semibold text-zinc-200 sm:grid-cols-3 ${className}`}>
+      {whyItems.map((item) => (
+        <div className="flex items-center gap-2 border-l-2 border-pravac-orange/70 pl-3" key={item}>
+          <CheckCircle2 className="shrink-0 text-pravac-orange" size={17} />
+          <span>{item}</span>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -510,13 +547,5 @@ function Field({ label, ...props }) {
 }
 
 function VehicleMedia({ model }) {
-  if (model.image?.type === 'remote') {
-    return (
-      <div className="flex aspect-[16/10] items-center justify-center bg-[radial-gradient(circle_at_50%_18%,#ffffff,#f4f5f7)] p-5">
-        <img className="max-h-full w-full object-contain" src={model.image.url} alt={model.title} />
-      </div>
-    );
-  }
-
-  return <div className="aspect-[16/10] bg-smoke" />;
+  return <VehicleImagePlaceholder className="aspect-[16/10]" model={model} />;
 }

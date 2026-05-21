@@ -56,6 +56,7 @@ export function findAvailableVehicleModels(search, store, filters = {}) {
 }
 
 export function matchesVehicleFilters(model, filters) {
+  if (filters.bodyType && normalizeBodyType(model.bodyType) !== filters.bodyType) return false;
   if (filters.category && model.category !== filters.category) return false;
   if (filters.transmission && model.transmission !== filters.transmission) return false;
   if (filters.fuelType && model.fuelType !== filters.fuelType) return false;
@@ -67,6 +68,14 @@ export function matchesVehicleFilters(model, filters) {
   if (filters.isFamily && !model.isFamily) return false;
   if (filters.crossBorderAllowed && !model.crossBorderAllowed) return false;
   return true;
+}
+
+function normalizeBodyType(bodyType = '') {
+  const normalized = bodyType.toLowerCase();
+  if (normalized === 'estate') return 'wagon';
+  if (normalized === 'van') return 'minivan';
+  if (normalized.includes('sedan')) return 'sedan';
+  return normalized;
 }
 
 export function isUnitBlockedOnDate(unitId, blocks, date) {

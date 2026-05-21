@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 360" role="img" aria-labelledby="title desc">
+<title id="title">PRAVAC HATCHBACK body icon</title>
+<desc id="desc">Vector car body icon for HATCHBACK category.</desc>
+
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#F6F8F9"/>
+    <stop offset="0.52" stop-color="#EEF3F5"/>
+    <stop offset="1" stop-color="#FFF1D5"/>
+  </linearGradient>
+  <linearGradient id="orangeGrad" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#F8A51B"/>
+    <stop offset="1" stop-color="#F28B00"/>
+  </linearGradient>
+  <linearGradient id="blueGrad" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#08324C"/>
+    <stop offset="1" stop-color="#061F31"/>
+  </linearGradient>
+  <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#062E45" flood-opacity="0.13"/>
+  </filter>
+</defs>
+
+<rect width="760" height="360" fill="transparent"/>
+<g filter="url(#softShadow)">
+  <path d="M74 270 L112 205 C130 174 169 156 232 154 L386 154 C429 154 470 177 503 218 L588 270 L682 270" fill="none" stroke="url(#blueGrad)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M92 236 C154 190 213 161 278 158 L386 158 C434 161 475 190 510 235" fill="none" stroke="url(#orangeGrad)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M195 187 L258 163 L378 163 L444 204 L166 204 Z M276 164 L288 204 M379 164 L418 204" fill="none" stroke="#062E45" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity=".92"/>
+  <path d="M584 270 L506 219 L504 245 M74 270 L74 258 C74 238 91 222 114 220" fill="none" stroke="#062E45" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity=".65"/>
+  <circle cx="205" cy="276" r="42" fill="#062E45"/>
+  <circle cx="205" cy="276" r="17" fill="#F59B12"/>
+  <circle cx="555" cy="276" r="42" fill="#062E45"/>
+  <circle cx="555" cy="276" r="17" fill="#F59B12"/>
+  <path d="M88 270 H672" stroke="#062E45" stroke-width="8" stroke-linecap="round" opacity=".92"/>
+</g>
+</svg>

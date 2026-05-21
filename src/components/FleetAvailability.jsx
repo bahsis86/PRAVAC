@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useI18n } from '../i18n/I18nContext.jsx';
 import { isUnitBlockedOnDate } from '../utils/availability.js';
 import { getMockStore } from '../utils/storage.js';
+import VehicleImagePlaceholder from './VehicleImagePlaceholder.jsx';
 import AmbientBackground from './visual/AmbientBackground.jsx';
 import GlowCard from './visual/GlowCard.jsx';
 
@@ -114,21 +115,5 @@ function isModelAvailableOnDate(modelId, store, date) {
 }
 
 function MiniVehicleMedia({ model }) {
-  if (model.image?.type === 'remote') {
-    return (
-      <div className="flex h-full min-h-28 items-center justify-center bg-[radial-gradient(circle_at_50%_18%,#ffffff,#f4f5f7)] p-2">
-        <img className="max-h-24 w-full object-contain" src={model.image.url} alt={model.title} />
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className="relative flex h-full min-h-28 items-end overflow-hidden p-3 text-white"
-      style={{ background: `radial-gradient(circle at 20% 12%, rgba(255,255,255,0.22), transparent 28%), linear-gradient(135deg, ${model.image?.from || '#171717'}, ${model.image?.to || '#a91524'})` }}
-    >
-      <span className="absolute -right-8 bottom-3 h-16 w-36 rounded-full border-4 border-white/20" />
-      <span className="text-xs font-black uppercase tracking-wide">{model.brand}</span>
-    </div>
-  );
+  return <VehicleImagePlaceholder className="h-full min-h-28" model={model} />;
 }

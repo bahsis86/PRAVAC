@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500">
+<rect width="900" height="500" fill="transparent"/>
+<g opacity="0.055" transform="translate(90,40) scale(1.0)"><g id="pravac-mark" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M209 170 C154 113 181 65 226 78 C280 94 316 170 337 252" stroke="#F59B12" stroke-width="18"/>
+  <path d="M335 247 C360 130 443 78 552 70 C600 66 652 70 707 81 C657 96 617 100 581 100 C476 102 407 144 370 247" stroke="#F59B12" stroke-width="26"/>
+  <path d="M192 126 C185 169 241 191 333 191 L433 191 C500 191 506 250 423 287 C477 272 526 239 505 199 C493 174 462 165 423 165 L336 166 C250 168 209 149 192 126 Z" fill="#062E45"/>
+  <path d="M191 280 C176 242 229 219 293 213 C240 229 205 252 191 280 Z" fill="#062E45"/>
+  <path d="M294 214 L331 214 L348 248 L313 248 Z" fill="#062E45"/>
+</g></g>
+<g opacity="0.04" transform="translate(455,190) scale(.62) rotate(-8)"><g id="pravac-mark" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M209 170 C154 113 181 65 226 78 C280 94 316 170 337 252" stroke="#F59B12" stroke-width="18"/>
+  <path d="M335 247 C360 130 443 78 552 70 C600 66 652 70 707 81 C657 96 617 100 581 100 C476 102 407 144 370 247" stroke="#F59B12" stroke-width="26"/>
+  <path d="M192 126 C185 169 241 191 333 191 L433 191 C500 191 506 250 423 287 C477 272 526 239 505 199 C493 174 462 165 423 165 L336 166 C250 168 209 149 192 126 Z" fill="#062E45"/>
+  <path d="M191 280 C176 242 229 219 293 213 C240 229 205 252 191 280 Z" fill="#062E45"/>
+  <path d="M294 214 L331 214 L348 248 L313 248 Z" fill="#062E45"/>
+</g></g>
+</svg>
