@@ -73,7 +73,7 @@ export function matchesVehicleFilters(model, filters) {
 function normalizeBodyType(bodyType = '') {
   const normalized = bodyType.toLowerCase();
   if (normalized === 'estate') return 'wagon';
-  if (normalized === 'van') return 'minivan';
+  if (normalized === 'convertible' || normalized === 'cabrio') return 'cabriolet';
   if (normalized.includes('sedan')) return 'sedan';
   return normalized;
 }

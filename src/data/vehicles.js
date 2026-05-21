@@ -37,7 +37,7 @@ const vehicleBodyTypes = {
   'bmw-3-series': 'sedan',
   'audi-a4-avant': 'wagon',
   'mercedes-v-class': 'minivan',
-  'renault-trafic': 'minivan',
+  'renault-trafic': 'van',
 };
 
 export const vehicleModels = [

@@ -51,14 +51,15 @@ const defaultFilters = {
 };
 
 const bodyTypes = [
-  { id: 'sedan', label: 'Sedan', icon: assetPath('assets/pravac/body-cards/body-sedan-card.svg') },
-  { id: 'hatchback', label: 'Hatchback', icon: assetPath('assets/pravac/body-cards/body-hatchback-card.svg') },
-  { id: 'suv', label: 'SUV', icon: assetPath('assets/pravac/body-cards/body-suv-card.svg') },
-  { id: 'wagon', label: 'Wagon', icon: assetPath('assets/pravac/body-cards/body-wagon-card.svg') },
-  { id: 'coupe', label: 'Coupe', icon: assetPath('assets/pravac/body-cards/body-coupe-card.svg') },
-  { id: 'convertible', label: 'Cabrio', icon: assetPath('assets/pravac/body-cards/body-convertible-card.svg') },
-  { id: 'minivan', label: 'Minivan', icon: assetPath('assets/pravac/body-cards/body-minivan-card.svg') },
-  { id: 'pickup', label: 'Pickup', icon: assetPath('assets/pravac/body-cards/body-pickup-card.svg') },
+  { id: 'sedan', label: 'Sedan', icon: assetPath('assets/pravac/body-cards/body-sedan.svg') },
+  { id: 'hatchback', label: 'Hatchback', icon: assetPath('assets/pravac/body-cards/body-hatchback.svg') },
+  { id: 'suv', label: 'SUV', icon: assetPath('assets/pravac/body-cards/body-suv.svg') },
+  { id: 'wagon', label: 'Wagon', icon: assetPath('assets/pravac/body-cards/body-wagon.svg') },
+  { id: 'coupe', label: 'Coupe', icon: assetPath('assets/pravac/body-cards/body-coupe.svg') },
+  { id: 'cabriolet', label: 'Cabriolet', icon: assetPath('assets/pravac/body-cards/body-cabriolet.svg') },
+  { id: 'minivan', label: 'Minivan', icon: assetPath('assets/pravac/body-cards/body-minivan.svg') },
+  { id: 'pickup', label: 'Pickup', icon: assetPath('assets/pravac/body-cards/body-pickup.svg') },
+  { id: 'van', label: 'Van', icon: assetPath('assets/pravac/body-cards/body-van.svg') },
 ];
 
 export default function CarReservation() {
@@ -477,20 +478,20 @@ function BodyTypeFilter({ activeBodyType, copy, onChange }) {
           </button>
         )}
       </div>
-      <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-4 md:overflow-visible md:px-0 md:pb-0">
+      <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0 lg:grid-cols-5">
         {bodyTypes.map((type) => {
           const active = activeBodyType === type.id;
           return (
             <button
               key={type.id}
-              className={`group min-w-[156px] snap-start rounded-lg border p-3 text-left transition md:min-w-0 ${active ? 'border-pravac-orange bg-[#FFF8E8] shadow-[0_0_0_4px_rgba(245,155,18,0.16)]' : 'border-zinc-200 bg-white hover:border-pravac-orange/70 hover:bg-[#FFF1D5]/35'}`}
+              className={`group min-w-[168px] snap-start rounded-md bg-transparent p-1 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-pravac-orange focus-visible:ring-offset-2 md:min-w-0 ${active ? 'ring-2 ring-pravac-orange ring-offset-2 ring-offset-white' : 'hover:opacity-90'}`}
               type="button"
               onClick={() => onChange(type.id)}
+              aria-label={type.label}
               aria-pressed={active}
             >
-              <img className="aspect-[4/3] w-full object-contain" src={type.icon} alt="" aria-hidden="true" />
-              <span className={`mt-2 block text-center text-sm font-black ${active ? 'text-pravac-blue' : 'text-graphite group-hover:text-pravac-blue'}`}>
-                {type.label}
+              <span className="block aspect-[2/1] w-full">
+                <img className="h-full w-full object-contain" src={type.icon} alt="" aria-hidden="true" />
               </span>
             </button>
           );
